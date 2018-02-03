@@ -1,0 +1,159 @@
+package com.example.idolgo;
+
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.provider.DocumentsContract;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.text.Html;
+import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
+import org.w3c.dom.Text;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Vector;
+
+public class PlaceInfo extends AppCompatActivity {
+
+    String imgurl;
+    ImageView photo;
+    TextView info, address, tel, url;
+    Context context=this;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_place_info);
+
+        photo = (ImageView)findViewById(R.id.photo);
+        info = (TextView)findViewById(R.id.info);
+        address = (TextView)findViewById(R.id.address);
+        tel = (TextView)findViewById(R.id.tel);
+        url = (TextView)findViewById(R.id.url);
+
+        info.setMovementMethod(ScrollingMovementMethod.getInstance());
+        Glide.with(this).load("http://english.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=218&fileTy=MEDIA&fileNo=1&thumbTy=L").into(photo);
+        DownloadWebpageTask dwt = new DownloadWebpageTask();
+        dwt.execute();
+    }
+
+
+    private class DownloadWebpageTask extends AsyncTask<Void, Void, Void> {
+
+        Elements element;
+
+        String strinfo;
+
+        Elements dl, dt, dd;
+        Vector<String> vecdt, vecdd;
+
+        protected Void doInBackground(Void... urls) {
+            try {
+               Document doc = Jsoup.connect("http://english.visitseoul.net/attractions/Bukchon-Hanok-Village_/263").get();
+                element = doc.select("body").select("#container").select(".holder").select("#content").select(".box-content-slider").select("#main-img").select("img");
+                //;
+                imgurl = element.attr("src");
+
+
+                element = doc.select("body").select("#container").select(".holder").select("#content").select(".box-content.defaultopen").select(".content").select(".fc-black");
+                strinfo = element.toString();
+
+
+                dl = doc.select("body").select("#container").select(".holder").select("#content").select(".box-content.defaultopen.detail").select(".content").select(".cnt-detail.demilight.fc-black2");
+                Log.i("dl", dl.toString());
+                dt = dl.select("dt");
+                dd = dl.select("dd");
+                Log.i("dt", dt.toString());
+                Log.i("dd", dd.toString());
+              Log.i("dt size", ""+dt.size());
+              vecdt = new Vector<String>();
+                for(int i=0;i<dt.size();i++) {
+
+                  vecdt.add(dt.get(i).text());
+
+                    Log.i("dt : "+i, vecdt.get(i));
+
+                }
+                vecdd = new Vector<String>();
+                for(int i=0;i<dd.size();i++){
+                    vecdd.add(dd.get(i).text());
+                    Log.i("dd : "+i, vecdd. get(i));
+                }
+                Log.i("element", element.toString());
+
+
+
+
+
+
+                Log.i("imgurl","http://english.visitseoul.net"+imgurl);
+
+                /*DownloadWebpageTask2 dwt2 = new DownloadWebpageTask2();
+                dwt2.execute();*/
+
+                /*InputStream in = new java.net.URL("http://english.visitseoul.net"+imgurl).openStream();
+                photoicon = BitmapFactory.decodeStream(in);*/
+
+            } catch (IOException e) {
+
+            }
+           return null;
+        }
+
+        protected void onPostExecute(Void result) {
+            info.setText(Html.fromHtml(strinfo));
+
+            for(int i=0;i<vecdt.size();i++){
+                if(vecdt.get(i).equals("• Address"))
+                    address.setText(vecdd.get(i));
+                else if(vecdt.get(i).equals("• Phone"))
+                    tel.setText(vecdd.get(i));
+                else if(vecdt.get(i).equals("• Website"))
+                    url.setText(dd.get(i).select("a").attr("href"));
+            }
+            Glide.with(context).load(Uri.parse("http://english.visitseoul.net"+imgurl+".jpg")).into(photo);
+        }
+
+
+    }
+   /* private class DownloadWebpageTask2 extends AsyncTask<Void, Void, Void> {
+
+        Bitmap photoicon = null;
+        protected Void doInBackground(Void... urls) {
+            try {
+                Log.i("dd","ztz");
+               Glide.with(context).load(Uri.parse("http://english.visitseoul.net"+imgurl)).into(photo);
+            }
+            catch(Exception e) {
+
+            }
+            return null;
+        }
+
+        protected void onPostExecute(Void result) {
+
+            Log.i("ㅋㅅㅋ","ㅎㅎ");
+            photo.setImageBitmap(photoicon);
+        }
+
+    }
+*/
+        public void next(View v){
+        Intent it = new Intent(this, PlaceList.class);
+        startActivity(it);
+    }
+
+}
