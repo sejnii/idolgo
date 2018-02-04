@@ -152,7 +152,7 @@ public class PlaceInfo extends AppCompatActivity {
     }
 */
         public void next(View v){
-        Intent it = new Intent(this, PlaceList.class);
+        Intent it = new Intent(this, Categories.class);
         startActivity(it);
     }
 

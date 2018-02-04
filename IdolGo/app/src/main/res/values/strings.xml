@@ -1,3 +1,14 @@
 <resources>
+
     <string name="app_name">IdolGo</string>
+    <string name="categories0">Top10</string>
+    <string name="categories1">Traditional \nHeritage</string>
+    <string name="categories2">Hot Place</string>
+    <string name="categories3">Food Streets</string>
+    <string name="categories4">Shopping</string>
+    <string name="categories5">Night Life</string>
+    <string name="categories6">Korean Wave</string>
+    <string name="categories7">Nature</string>
+    <string name="categories8">Museums</string>
+
 </resources>
