@@ -12,11 +12,11 @@
         android:gravity="center"
         android:layout_margin="5sp"
         android:id="@+id/num"
-        android:layout_width="wrap_content"
+        android:layout_width="30sp"
         android:layout_height="match_parent"
         android:textColor="#c9b3b5"
         android:textSize="25sp"
-        android:layout_weight="1"
+
         android:text="1"
         />
 
@@ -25,18 +25,17 @@
         android:gravity="center"
         android:layout_margin="5sp"
         android:id="@+id/pic"
-        android:layout_width="wrap_content"
+        android:layout_width="60sp"
         android:layout_height="match_parent"
-        android:layout_weight="2"/>
+       />
 
 
     <TextView
         android:gravity="center_vertical"
         android:layout_margin="5sp"
         android:id="@+id/place"
-        android:layout_width="wrap_content"
+        android:layout_width="170sp"
         android:layout_height="match_parent"
-        android:layout_weight="5"
         android:textSize="20sp"
         android:text="Samsung d'light"/>
 
@@ -45,9 +44,9 @@
         android:gravity="center"
         android:layout_margin="5sp"
         android:id="@+id/distance"
-        android:layout_width="wrap_content"
+        android:layout_width="60sp"
         android:layout_height="match_parent"
-        android:layout_weight="2"
+
         android:text="3.5km"
         android:textSize="20sp"
         android:textColor="#ba7c8d"/>

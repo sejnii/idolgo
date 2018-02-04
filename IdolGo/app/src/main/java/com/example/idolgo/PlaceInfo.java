@@ -14,6 +14,7 @@ import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -29,23 +30,42 @@ import java.util.Vector;
 
 public class PlaceInfo extends AppCompatActivity {
 
-    String imgurl;
+    String imgurl, strname, strcategory, strurl;
     ImageView photo;
-    TextView info, address, tel, url;
+    TextView info, address, tel, url, title;
     Context context=this;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_place_info);
 
+
+        Intent it = getIntent();
+        strname = it.getStringExtra("it_name");
+        strcategory = it.getStringExtra("it_category");
+        strurl = it.getStringExtra("it_url");
+
         photo = (ImageView)findViewById(R.id.photo);
+       /* if(category.equals(Top10))
+
+
+
+
+
+
+
+        */
+
         info = (TextView)findViewById(R.id.info);
         address = (TextView)findViewById(R.id.address);
         tel = (TextView)findViewById(R.id.tel);
         url = (TextView)findViewById(R.id.url);
+        title = (TextView)findViewById(R.id.title);
+
+        title.setText(strname);
 
         info.setMovementMethod(ScrollingMovementMethod.getInstance());
-        Glide.with(this).load("http://english.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=218&fileTy=MEDIA&fileNo=1&thumbTy=L").into(photo);
+
         DownloadWebpageTask dwt = new DownloadWebpageTask();
         dwt.execute();
     }
@@ -62,7 +82,7 @@ public class PlaceInfo extends AppCompatActivity {
 
         protected Void doInBackground(Void... urls) {
             try {
-               Document doc = Jsoup.connect("http://english.visitseoul.net/attractions/Bukchon-Hanok-Village_/263").get();
+               Document doc = Jsoup.connect(strurl).get();
                 element = doc.select("body").select("#container").select(".holder").select("#content").select(".box-content-slider").select("#main-img").select("img");
                 //;
                 imgurl = element.attr("src");
@@ -157,3 +177,4 @@ public class PlaceInfo extends AppCompatActivity {
     }
 
 }
+
