@@ -4,7 +4,11 @@ import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.OvalShape;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,10 +18,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
@@ -42,6 +49,7 @@ public class PlaceList extends AppCompatActivity {
     private static final String TAG_NAME = "name";
     private static final String TAG_URL = "url";
 
+    int picnum;
 
     JSONArray spot = null;
 
@@ -51,8 +59,8 @@ public class PlaceList extends AppCompatActivity {
     Vector placeCategoryVector = new Vector<String>();
     Vector placeNameVector = new Vector<String>();
     Vector placeUrlVector = new Vector<String>();
-    String place_title = "";
-    String place_description = "";
+
+
     LinearLayout listLayout;
     final int nll = 10000;
     final int nnum = 20000;
@@ -67,13 +75,12 @@ public class PlaceList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_place_list);
 
-/*
+
         Intent it = getIntent();
         it_cat = it.getStringExtra("it_cat");
-        if(it_cat.equals("Traditional \nHeritage"))
-            it_cat = "Traditional Heritage";
 
-*/
+
+
 
         listLayout = (LinearLayout) findViewById(R.id.dynamicList);
         //if(it_dc.equals(it facilities))
@@ -206,7 +213,7 @@ int cnt=1;
                     LinearLayout ll = new LinearLayout(context);
                     ll.setId(nll + i);
                     ll.setOrientation(LinearLayout.HORIZONTAL);
-                    LinearLayout.LayoutParams layparam = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 250);
+                    LinearLayout.LayoutParams layparam = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 300);
                     layparam.setMargins(10, 10, 10, 10);
                     ll.setBackground(getResources().getDrawable(R.drawable.information_border));
                     ll.setLayoutParams(layparam);
@@ -224,12 +231,19 @@ int cnt=1;
 
 
                     ImageView pic = new ImageView(context);
+                    picnum = npic+i;
                     pic.setId(npic + i);
+
+
                     layparam = new LinearLayout.LayoutParams(60, LinearLayout.LayoutParams.MATCH_PARENT);
                     layparam.setMargins(5, 5, 5, 5);
                     layparam.weight = 2;
                     num.setLayoutParams(layparam);
                     num.setGravity(Gravity.CENTER);
+                    pic.setBackground(new ShapeDrawable(new OvalShape()));
+                    if(Build.VERSION.SDK_INT >= 21) {
+                        pic.setClipToOutline(true);
+                    }
 
 
                     TextView place = new TextView(context);
@@ -316,6 +330,60 @@ int cnt=1;
 
         }
     }
+
+
+
+
+
+
+
+    private class DownloadWebpageTask2 extends DownloadWebpageTask{
+
+
+        protected String doInBackground(String... urls) {
+
+            try {
+                Log.i("tag", "doinbackground");
+                return (String) downloadUrl((String) urls[0]);
+            } catch (IOException e) {
+                return "다운로드 실패";
+            }
+        }
+        Elements element;
+
+      String imgurl;
+        private String downloadUrl(String myurl) throws IOException {
+
+            try {
+                Document doc = Jsoup.connect(myurl).get();
+                Log.i("myurl", myurl);
+                element = doc.select("body").select("#container").select(".holder").select("#content").select(".box-content-slider").select("#main-img").select("img");
+                //;
+                imgurl = element.attr("src");
+
+                Log.i("imgurl", imgurl);
+                return "http://english.visitseoul.net"+imgurl+".jpg";
+            } catch (Exception e) {
+                    return null;
+            }
+
+
+
+
+        }
+
+        protected void onPostExecute(String result) {
+
+
+
+
+
+        }
+
+
+
+    }
+
 }
 
 

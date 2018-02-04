@@ -4,8 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.OvalShape;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.provider.DocumentsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -31,7 +34,7 @@ import java.util.Vector;
 public class PlaceInfo extends AppCompatActivity {
 
     String imgurl, strname, strcategory, strurl;
-    ImageView photo;
+    ImageView photo, title_icon;
     TextView info, address, tel, url, title;
     Context context=this;
     @Override
@@ -46,7 +49,7 @@ public class PlaceInfo extends AppCompatActivity {
         strurl = it.getStringExtra("it_url");
 
         photo = (ImageView)findViewById(R.id.photo);
-       /* if(category.equals(Top10))
+        title_icon = (ImageView)findViewById(R.id.title_icon);
 
 
 
@@ -54,7 +57,10 @@ public class PlaceInfo extends AppCompatActivity {
 
 
 
-        */
+
+
+
+
 
         info = (TextView)findViewById(R.id.info);
         address = (TextView)findViewById(R.id.address);
@@ -172,7 +178,7 @@ public class PlaceInfo extends AppCompatActivity {
     }
 */
         public void next(View v){
-        Intent it = new Intent(this, PlaceList.class);
+        Intent it = new Intent(this, Categories.class);
         startActivity(it);
     }
 
