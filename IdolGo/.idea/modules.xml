@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/IdolGo.iml" filepath="$PROJECT_DIR$/IdolGo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SDK_release_v1.0/SDK_release_v1.0.iml" filepath="$PROJECT_DIR$/SDK_release_v1.0/SDK_release_v1.0.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "C:\\android\\idolgo_workspace\\ODsaySDKforAndroid_v1.0\\Sample_ODsaySDKforAndroid\\ODsayAndroidSDKSample\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-v21\\abc_edit_text_material.xml",
+        "source": "C:\\Users\\세진\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-26.0.0-alpha1.aar\\c21b5c1be2051272d1216fd98129cf0b\\res\\drawable-v21\\abc_edit_text_material.xml"
+    },
+    {
+        "merged": "C:\\android\\idolgo_workspace\\ODsaySDKforAndroid_v1.0\\Sample_ODsaySDKforAndroid\\ODsayAndroidSDKSample\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-v21\\notification_action_background.xml",
+        "source": "C:\\Users\\세진\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-26.0.0-alpha1.aar\\c21b5c1be2051272d1216fd98129cf0b\\res\\drawable-v21\\notification_action_background.xml"
+    },
+    {
+        "merged": "C:\\android\\idolgo_workspace\\ODsaySDKforAndroid_v1.0\\Sample_ODsaySDKforAndroid\\ODsayAndroidSDKSample\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-v21\\abc_btn_colored_material.xml",
+        "source": "C:\\Users\\세진\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-26.0.0-alpha1.aar\\c21b5c1be2051272d1216fd98129cf0b\\res\\drawable-v21\\abc_btn_colored_material.xml"
+    },
+    {
+        "merged": "C:\\android\\idolgo_workspace\\ODsaySDKforAndroid_v1.0\\Sample_ODsaySDKforAndroid\\ODsayAndroidSDKSample\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-v21\\abc_action_bar_item_background_material.xml",
+        "source": "C:\\Users\\세진\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-26.0.0-alpha1.aar\\c21b5c1be2051272d1216fd98129cf0b\\res\\drawable-v21\\abc_action_bar_item_background_material.xml"
+    }
+]

@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "C:\\android\\idolgo_workspace\\ODsaySDKforAndroid_v1.0\\Sample_ODsaySDKforAndroid\\ODsayAndroidSDKSample\\build\\intermediates\\res\\merged\\androidTest\\debug\\color-v11\\abc_background_cache_hint_selector_material_light.xml",
+        "source": "C:\\Users\\세진\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-26.0.0-alpha1.aar\\c21b5c1be2051272d1216fd98129cf0b\\res\\color-v11\\abc_background_cache_hint_selector_material_light.xml"
+    },
+    {
+        "merged": "C:\\android\\idolgo_workspace\\ODsaySDKforAndroid_v1.0\\Sample_ODsaySDKforAndroid\\ODsayAndroidSDKSample\\build\\intermediates\\res\\merged\\androidTest\\debug\\color-v11\\abc_background_cache_hint_selector_material_dark.xml",
+        "source": "C:\\Users\\세진\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-26.0.0-alpha1.aar\\c21b5c1be2051272d1216fd98129cf0b\\res\\color-v11\\abc_background_cache_hint_selector_material_dark.xml"
+    }
+]
