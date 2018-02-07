@@ -1,16 +1,27 @@
 package com.example.idolgo;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.provider.CalendarContract;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.odsay.odsayandroidsdk.API;
 import com.odsay.odsayandroidsdk.ODsayData;
@@ -20,10 +31,15 @@ import com.odsay.odsayandroidsdk.OnResultCallbackListener;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Vector;
 
 
-public class PublicTransportCase extends AppCompatActivity {
+public class PublicTransportCase extends AppCompatActivity  {
 
 
     LinearLayout linearLayout;
@@ -31,12 +47,13 @@ public class PublicTransportCase extends AppCompatActivity {
     private JSONObject jsonObject;
     final int nll = 10000;
     Context context = this;
-
-
-   // Vector <Vector <Integer>> caseVector = new Vector<Vector <Integer>>();
-    int caseSubPathArr[][][];//path, subpath, (trafficType, num, color, time)
+    String startX, startY;
+    LocationManager manager;
+    String pathArr[];
+    String caseSubPathArr[][][];//path, subpath, (trafficType, num, color, time)
     int caseInfoArr[][];//path, (totaltime, walktotaltime, payment, busTransitCount+subwayTransitCount)
-
+    String it_endX, it_endY;
+    String it_placename;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,11 +67,68 @@ public class PublicTransportCase extends AppCompatActivity {
         odsayService.setReadTimeout(5000);
         odsayService.setConnectionTimeout(5000);
 
+        Intent it = getIntent();
+       it_endX = it.getStringExtra("it_endX");
+       it_endY = it.getStringExtra("it_endY");
+       it_placename = it.getStringExtra("it_placename");
+        // Acquire a reference to the system Location Manager
 
-        odsayService.requestSearchPubTransPath("126.926493082645", "37.6134436427887", "127.126936754911", "37.5004198786564", "0", "0", "0", onResultCallbackListener);
+        startLocationService();
+
+
 
 
     }
+    private void startLocationService(){
+
+        manager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+
+        long minTime =1000;
+        float minDistance = 1;
+
+        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)!=PackageManager.PERMISSION_GRANTED)
+        {
+            Toast.makeText(this, "permissionx", Toast.LENGTH_LONG).show();
+            return;
+        }
+        manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, minTime, minDistance, mLocationListener);
+        manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, minTime, minDistance, mLocationListener);
+
+    }
+
+    private final LocationListener mLocationListener = new LocationListener() {
+        @Override
+        public void onLocationChanged(Location location) {
+            Double latitude = location.getLatitude();
+            Double longitude = location.getLongitude();
+            startX = ""+longitude;
+            startY = ""+latitude;
+            Log.i("lat", ""+latitude);
+            Log.i("long", ""+longitude);
+            manager.removeUpdates(mLocationListener);
+            odsayService.requestSearchPubTransPath(startX, startY, it_endX, it_endY, "0", "0", "0", onResultCallbackListener);
+
+        }
+
+        @Override
+        public void onStatusChanged(String s, int i, Bundle bundle) {
+
+        }
+
+        @Override
+        public void onProviderEnabled(String s) {
+
+        }
+
+        @Override
+        public void onProviderDisabled(String s) {
+
+        }
+    };
+
+
+
+
 
     private OnResultCallbackListener onResultCallbackListener = new OnResultCallbackListener() {
         @Override
@@ -66,56 +140,58 @@ public class PublicTransportCase extends AppCompatActivity {
                 JSONArray jArrSubpath;
                 JSONObject jObjInfo;
                 jsonObject = oDsayData.getJson();
-                Log.i("jsonobj", jsonObject.toString());
+
 
                 jsonObject = jsonObject.getJSONObject("result");
-                Log.i("result", jsonObject.toString());
+
                 JSONArray jArrPath = jsonObject.getJSONArray("path");
                 pathcnt = jArrPath.length();
-                caseSubPathArr = new int[pathcnt][][];
+                pathArr = new String[pathcnt];
+                caseSubPathArr = new String[pathcnt][][];
                 caseInfoArr = new int[pathcnt][4];
                 for (int i = 0; i < pathcnt; i++) {
                     JSONObject jsonPathObject = jArrPath.getJSONObject(i);
+                    pathArr[i] = jsonPathObject.toString();
                     Log.i("path"+i, jsonPathObject.toString());
                     jArrSubpath = jsonPathObject.getJSONArray("subPath");
                     subpathcnt = jArrSubpath.length();
-                    caseSubPathArr[i] = new int[subpathcnt][5];
+                    caseSubPathArr[i] = new String[subpathcnt][5];
                     for (int j = 0; j < subpathcnt; j++) {
                         jsonObject = jArrSubpath.getJSONObject(j);
                         Log.i("subpath"+j , jsonObject.toString());
                         int trafficType = Integer.parseInt(jsonObject.getString("trafficType"));
                         Log.i("traffictype", ""+trafficType);
-                        caseSubPathArr[i][j][0] = trafficType;
+                        caseSubPathArr[i][j][0] = ""+trafficType;
                         if (trafficType == 3) {//도보
-                            caseSubPathArr[i][j][1] = -1;
-                            caseSubPathArr[i][j][2] = -1;
+                            caseSubPathArr[i][j][1] = "";
+                            caseSubPathArr[i][j][2] = "";
                             int walktime = Integer.parseInt(jsonObject.getString("sectionTime"));
-                            Log.i("walktime", ""+walktime);
+                            Log.i("walkstime", ""+walktime);
                             walktotaltime += walktime;
-                            caseSubPathArr[i][j][3] = walktime;
+                            caseSubPathArr[i][j][3] = ""+walktime;
                         } else if (trafficType == 1) {//지하철
                             JSONArray jArrLane = jsonObject.getJSONArray("lane");
                             JSONObject lane = jArrLane.getJSONObject(0);
                             Log.i("lane", lane.toString());
                             int subwaycode = Integer.parseInt(lane.getString("subwayCode"));
                             Log.i("subwaycode", "" + subwaycode);
-                            caseSubPathArr[i][j][1] = subwaycode;
-                            caseSubPathArr[i][j][2] = subwaycode;
+                            caseSubPathArr[i][j][1] = ""+subwaycode;
+                            caseSubPathArr[i][j][2] = ""+subwaycode;
                             int walktime = Integer.parseInt(jsonObject.getString("sectionTime"));
-                            caseSubPathArr[i][j][3] = walktime;
+                            caseSubPathArr[i][j][3] = ""+walktime;
 
                         } else if (trafficType == 2) {//버스
                             JSONArray jArrLane = jsonObject.getJSONArray("lane");
                             JSONObject lane = jArrLane.getJSONObject(0);
                             Log.i("buslane", lane.toString());
-                            int busNo = Integer.parseInt(lane.getString("busNo"));
+                            String busNo = lane.getString("busNo");
                             Log.i("busNo", ""+busNo);
                             int type = Integer.parseInt(lane.getString("type"));
                             Log.i("type", ""+type);
                             caseSubPathArr[i][j][1] = busNo;
-                            caseSubPathArr[i][j][2] = type;
+                            caseSubPathArr[i][j][2] = ""+type;
                             int walktime = Integer.parseInt(jsonObject.getString("sectionTime"));
-                            caseSubPathArr[i][j][3] = walktime;
+                            caseSubPathArr[i][j][3] = ""+walktime;
 
                         }
 
@@ -212,7 +288,7 @@ public class PublicTransportCase extends AppCompatActivity {
                         layparam = new LinearLayout.LayoutParams(90, 90);
                         layparam.setMargins(10, 10, 10, 10);
                         lane_pic.setLayoutParams(layparam);
-                        if (caseSubPathArr[i][j][0] == 1) {//지하철
+                        if (Integer.parseInt(caseSubPathArr[i][j][0]) == 1) {//지하철
                             lane_pic.setImageDrawable(getResources().getDrawable(R.drawable.subway));
                             subwaybuscnt++;
                             TextView lane = new TextView(context);
@@ -223,7 +299,7 @@ public class PublicTransportCase extends AppCompatActivity {
                             lane.setTextSize(15);
                             lane.setText("line " + caseSubPathArr[i][j][1]);
                             lane.setTextColor(Color.parseColor("#ffffff"));
-                            switch (caseSubPathArr[i][j][2]) {
+                            switch (Integer.parseInt(caseSubPathArr[i][j][2])) {
                                 case 1:
                                     lane.setBackgroundColor(Color.parseColor(getResources().getString(R.string.lane1)));
                                     break;
@@ -272,7 +348,7 @@ public class PublicTransportCase extends AppCompatActivity {
 
                         }
 
-                        if (caseSubPathArr[i][j][0] == 2) {//버스
+                        if (Integer.parseInt(caseSubPathArr[i][j][0]) == 2) {//버스
                             lane_pic.setImageDrawable(getResources().getDrawable(R.drawable.bus));
                             subwaybuscnt++;
                             TextView lane = new TextView(context);
@@ -283,7 +359,7 @@ public class PublicTransportCase extends AppCompatActivity {
                             lane.setTextSize(15);
                             lane.setText(""+caseSubPathArr[i][j][1]);
                             lane.setTextColor(Color.parseColor("#ffffff"));
-                            switch (caseSubPathArr[i][j][2]) {
+                            switch (Integer.parseInt(caseSubPathArr[i][j][2])) {
                                 case 1://일반버스
                                     lane.setBackgroundColor(Color.parseColor("#038762"));
                                 break;
@@ -332,6 +408,18 @@ public class PublicTransportCase extends AppCompatActivity {
                     ll.addView(ll2);
                     ll.addView(ll3);
 
+                    ll.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            int id = view.getId();
+                            Intent it = new Intent(context,PlaceInfo.class);
+                            Log.i("id", ""+(id-nll));
+                            it.putExtra("it_placename", it_placename);
+                            it.putExtra("it_path", pathArr[id-nll]);
+                            startActivity(it);
+
+                        }
+                    });
 
                     linearLayout.addView(ll);
 

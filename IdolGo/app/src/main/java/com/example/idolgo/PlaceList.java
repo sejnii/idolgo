@@ -94,6 +94,7 @@ public class PlaceList extends AppCompatActivity {
 
     }
 
+
     private class DownloadWebpageTask extends AsyncTask<String, Void, String> {
 
 
