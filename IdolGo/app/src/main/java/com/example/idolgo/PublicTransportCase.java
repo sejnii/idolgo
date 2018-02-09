@@ -12,6 +12,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.provider.CalendarContract;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,6 +24,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.odsay.odsayandroidsdk.API;
 import com.odsay.odsayandroidsdk.ODsayData;
 import com.odsay.odsayandroidsdk.ODsayService;
@@ -89,15 +92,44 @@ public class PublicTransportCase extends AppCompatActivity  {
         if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)!=PackageManager.PERMISSION_GRANTED)
         {
             Toast.makeText(this, "permissionx", Toast.LENGTH_LONG).show();
+            requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1000);
+
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1000);
+            showSettingsAlert();
+
             return;
         }
+        else{
+            if(!manager.isProviderEnabled(LocationManager.GPS_PROVIDER))
+                showSettingsAlert();
+        }
+
+
+
         manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, minTime, minDistance, mLocationListener);
         manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, minTime, minDistance, mLocationListener);
 
     }
+    public void showSettingsAlert() {
+        {
+            // GPS OFF 일때 Dialog 표시
+            new MaterialDialog.Builder(this).title("Location Service Settings").content("Setting GPS Service").positiveText("Confirm").onPositive(new MaterialDialog.SingleButtonCallback() {
+                @Override
+                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                    // GPS설정 화면으로 이동
+                    Intent intent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    intent.addCategory(Intent.CATEGORY_DEFAULT);
+                    startActivity(intent);
+                }
+            }).backgroundColor(Color.parseColor("#bbbcbf")).cancelable(false).canceledOnTouchOutside(false).show();
 
-    private final LocationListener mLocationListener = new LocationListener() {
-        @Override
+        }
+    }
+
+
+  LocationListener mLocationListener = new LocationListener(){
+
+
         public void onLocationChanged(Location location) {
             Double latitude = location.getLatitude();
             Double longitude = location.getLongitude();
@@ -327,6 +359,9 @@ public class PublicTransportCase extends AppCompatActivity  {
                                 case 9:
                                     lane.setBackgroundColor(Color.parseColor(getResources().getString(R.string.lane9)));
                                     break;
+                                case 100:
+                                    lane.setBackgroundColor(Color.parseColor("#ffcc01"));
+                                    break;
 
                             }
 
@@ -412,7 +447,7 @@ public class PublicTransportCase extends AppCompatActivity  {
                         @Override
                         public void onClick(View view) {
                             int id = view.getId();
-                            Intent it = new Intent(context,PlaceInfo.class);
+                            Intent it = new Intent(context,PublicTransportDetail.class);
                             Log.i("id", ""+(id-nll));
                             it.putExtra("it_placename", it_placename);
                             it.putExtra("it_path", pathArr[id-nll]);

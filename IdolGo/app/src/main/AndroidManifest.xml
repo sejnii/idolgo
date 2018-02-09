@@ -24,7 +24,7 @@
         <activity android:name=".PlaceList" />
         <activity android:name=".PublicTransportCase" />
         <activity android:name=".ODSaySample" />
-
+        <activity android:name=".PublicTransportDetail"></activity>
     </application>
 
 </manifest>
