@@ -10,5 +10,9 @@
     <string name="categories6">Korean Wave</string>
     <string name="categories7">Nature</string>
     <string name="categories8">Museums</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="total">Total</string>
+    <string name="detailed">Detailed route</string>
+    <string name="start">Start guidance</string>
 
 </resources>
