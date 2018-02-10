@@ -94,6 +94,7 @@ public class PlaceList extends AppCompatActivity {
 
     }
 
+
     private class DownloadWebpageTask extends AsyncTask<String, Void, String> {
 
 
@@ -140,68 +141,6 @@ public class PlaceList extends AppCompatActivity {
             }
 
 
-
-/*
-            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-            factory.setNamespaceAware(true);
-            XmlPullParser xpp = factory.newPullParser();
-
-            xpp.setInput(new StringReader(result));
-
-
-            int eventType = xpp.getEventType();
-
-
-            boolean bSet_item = false;
-            String tag_name="";
-            while (eventType != XmlPullParser.END_DOCUMENT) {
-
-               if(eventType == XmlPullParser.START_DOCUMENT){
-                   ;
-               }
-               else if(eventType == XmlPullParser.START_TAG){
-                   tag_name = xpp.getName();
-                   if(tag_name.equals("item"))
-                       bSet_item = true;
-
-               }
-
-               else if(eventType == XmlPullParser.TEXT){
-                   if(bSet_item && tag_name.equals("title")) {
-                       place_title += xpp.getText();
-                       Log.i("title", place_title);
-                   }
-
-                   if(bSet_item && tag_name.equals("description")){
-                       place_description += xpp.getText();
-                       Log.i("description", place_description);
-                   }
-               }
-
-               else if(eventType == XmlPullParser.END_TAG){
-                   tag_name = xpp.getName();
-                   if(tag_name.equals("item")){
-                       placeTitleVector.add(place_title);
-                       placeDescriptionVector.add(place_description);
-                       place_description="";
-                       place_title="";
-                       bSet_item = false;
-
-                   }
-               }
-
-                eventType = xpp.next();
-            }
-
-        }
-
-        catch(Exception e){
-
-        }
-
-
-
-*/
 int cnt=1;
             for (int i = 0; i < placeNameVector.size(); i++) {
                 if(placeCategoryVector.get(i).equals(it_cat)) {
@@ -212,108 +151,108 @@ int cnt=1;
 
                     LinearLayout ll = new LinearLayout(context);
                     ll.setId(nll + i);
-                    ll.setOrientation(LinearLayout.HORIZONTAL);
-                    LinearLayout.LayoutParams layparam = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 300);
-                    layparam.setMargins(10, 10, 10, 10);
-                    ll.setBackground(getResources().getDrawable(R.drawable.information_border));
-                    ll.setLayoutParams(layparam);
+                ll.setOrientation(LinearLayout.HORIZONTAL);
+                LinearLayout.LayoutParams layparam = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 300);
+                layparam.setMargins(10, 10, 10, 10);
+                ll.setBackground(getResources().getDrawable(R.drawable.information_border));
+                ll.setLayoutParams(layparam);
 
-                    TextView num = new TextView(context);
-                    num.setId(nnum + i);
-                    layparam = new LinearLayout.LayoutParams(30, LinearLayout.LayoutParams.MATCH_PARENT);
-                    layparam.setMargins(5, 5, 5, 5);
-                    num.setLayoutParams(layparam);
-                    num.setGravity(Gravity.CENTER);
-                    num.setTextColor(Color.parseColor("#c9b3b5"));
-                    num.setTextSize(25);
-                    String numstring = "" + (cnt);
-                    num.setText(numstring);
-
-
-                    ImageView pic = new ImageView(context);
-                    picnum = npic+i;
-                    pic.setId(npic + i);
+                TextView num = new TextView(context);
+                num.setId(nnum + i);
+                layparam = new LinearLayout.LayoutParams(30, LinearLayout.LayoutParams.MATCH_PARENT);
+                layparam.setMargins(5, 5, 5, 5);
+                num.setLayoutParams(layparam);
+                num.setGravity(Gravity.CENTER);
+                num.setTextColor(Color.parseColor("#c9b3b5"));
+                num.setTextSize(25);
+                String numstring = "" + (cnt);
+                num.setText(numstring);
 
 
-                    layparam = new LinearLayout.LayoutParams(60, LinearLayout.LayoutParams.MATCH_PARENT);
-                    layparam.setMargins(5, 5, 5, 5);
-                    layparam.weight = 2;
-                    num.setLayoutParams(layparam);
-                    num.setGravity(Gravity.CENTER);
-                    pic.setBackground(new ShapeDrawable(new OvalShape()));
-                    if(Build.VERSION.SDK_INT >= 21) {
-                        pic.setClipToOutline(true);
-                    }
+                ImageView pic = new ImageView(context);
+                picnum = npic+i;
+                pic.setId(npic + i);
 
 
-                    TextView place = new TextView(context);
-                    place.setId(nplace + i);
-                    layparam = new LinearLayout.LayoutParams(170, LinearLayout.LayoutParams.MATCH_PARENT);
-                    layparam.setMargins(5, 5, 5, 5);
-                    layparam.weight = 5;
-                    place.setLayoutParams(layparam);
-                    place.setGravity(Gravity.CENTER_VERTICAL);
-                    place.setTextSize(20);
-                    place.setText((String) placeNameVector.elementAt(i));
-
-
-                    TextView distance = new TextView(context);
-                    distance.setId(ndistance + i);
-                    layparam = new LinearLayout.LayoutParams(60, LinearLayout.LayoutParams.MATCH_PARENT);
-                    layparam.setMargins(5, 5, 5, 5);
-                    layparam.weight = 2;
-                    distance.setLayoutParams(layparam);
-                    distance.setGravity(Gravity.CENTER);
-                    distance.setTextColor(Color.parseColor("#ba7c8d"));
-                    distance.setTextSize(20);
-                    distance.setText("3.5km");
-
-                    ll.addView(num);
-                    ll.addView(pic);
-                    ll.addView(place);
-                    ll.addView(distance);
-
-                    ll.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            int id = view.getId();
-                            Intent it = new Intent(context,PlaceInfo.class);
-                            Log.i("id", ""+(id-nll));
-                            it.putExtra("it_url", (String)placeUrlVector.get(id-nll));
-                            it.putExtra("it_category", (String)placeCategoryVector.get(id-nll));
-                            it.putExtra("it_name", (String) placeNameVector.get(id-nll));
-                            startActivity(it);
-
-                    }
-                    });
-
-                    listLayout.addView(ll);
-
-                    cnt++;
+                layparam = new LinearLayout.LayoutParams(60, LinearLayout.LayoutParams.MATCH_PARENT);
+                layparam.setMargins(5, 5, 5, 5);
+                layparam.weight = 2;
+                num.setLayoutParams(layparam);
+                num.setGravity(Gravity.CENTER);
+                pic.setBackground(new ShapeDrawable(new OvalShape()));
+                if(Build.VERSION.SDK_INT >= 21) {
+                    pic.setClipToOutline(true);
                 }
 
+
+                TextView place = new TextView(context);
+                place.setId(nplace + i);
+                layparam = new LinearLayout.LayoutParams(170, LinearLayout.LayoutParams.MATCH_PARENT);
+                layparam.setMargins(5, 5, 5, 5);
+                layparam.weight = 5;
+                place.setLayoutParams(layparam);
+                place.setGravity(Gravity.CENTER_VERTICAL);
+                place.setTextSize(20);
+                place.setText((String) placeNameVector.elementAt(i));
+
+
+                TextView distance = new TextView(context);
+                distance.setId(ndistance + i);
+                layparam = new LinearLayout.LayoutParams(60, LinearLayout.LayoutParams.MATCH_PARENT);
+                layparam.setMargins(5, 5, 5, 5);
+                layparam.weight = 2;
+                distance.setLayoutParams(layparam);
+                distance.setGravity(Gravity.CENTER);
+                distance.setTextColor(Color.parseColor("#ba7c8d"));
+                distance.setTextSize(20);
+                distance.setText("3.5km");
+
+                ll.addView(num);
+                ll.addView(pic);
+                ll.addView(place);
+                ll.addView(distance);
+
+                ll.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        int id = view.getId();
+                        Intent it = new Intent(context,PlaceInfo.class);
+                        Log.i("id", ""+(id-nll));
+                        it.putExtra("it_url", (String)placeUrlVector.get(id-nll));
+                        it.putExtra("it_category", (String)placeCategoryVector.get(id-nll));
+                        it.putExtra("it_name", (String) placeNameVector.get(id-nll));
+                        startActivity(it);
+
+                    }
+                });
+
+                listLayout.addView(ll);
+
+                cnt++;
             }
 
         }
 
+    }
 
-        private String downloadUrl(String myurl) throws IOException {
+
+    private String downloadUrl(String myurl) throws IOException {
 
 
-            Log.i("tag", "downloadURL");
-            String uri = myurl;
-            BufferedReader bufferedReader = null;
-            HttpURLConnection con=null;
-            try {
-                URL url = new URL(uri);
-                con = (HttpURLConnection) url.openConnection();
-                StringBuilder sb = new StringBuilder();
-                bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
-                String json;
-                while ((json = bufferedReader.readLine()) != null) {
-                    sb.append(json + "\n");
-                    Log.i("str", json);
-                }
+        Log.i("tag", "downloadURL");
+        String uri = myurl;
+        BufferedReader bufferedReader = null;
+        HttpURLConnection con=null;
+        try {
+            URL url = new URL(uri);
+            con = (HttpURLConnection) url.openConnection();
+            StringBuilder sb = new StringBuilder();
+            bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            String json;
+            while ((json = bufferedReader.readLine()) != null) {
+                sb.append(json + "\n");
+                Log.i("str", json);
+            }
 
                 return sb.toString().trim();
 
@@ -386,5 +325,79 @@ int cnt=1;
 
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+            factory.setNamespaceAware(true);
+            XmlPullParser xpp = factory.newPullParser();
+
+            xpp.setInput(new StringReader(result));
+
+
+            int eventType = xpp.getEventType();
+
+
+            boolean bSet_item = false;
+            String tag_name="";
+            while (eventType != XmlPullParser.END_DOCUMENT) {
+
+               if(eventType == XmlPullParser.START_DOCUMENT){
+                   ;
+               }
+               else if(eventType == XmlPullParser.START_TAG){
+                   tag_name = xpp.getName();
+                   if(tag_name.equals("item"))
+                       bSet_item = true;
+
+               }
+
+               else if(eventType == XmlPullParser.TEXT){
+                   if(bSet_item && tag_name.equals("title")) {
+                       place_title += xpp.getText();
+                       Log.i("title", place_title);
+                   }
+
+                   if(bSet_item && tag_name.equals("description")){
+                       place_description += xpp.getText();
+                       Log.i("description", place_description);
+                   }
+               }
+
+               else if(eventType == XmlPullParser.END_TAG){
+                   tag_name = xpp.getName();
+                   if(tag_name.equals("item")){
+                       placeTitleVector.add(place_title);
+                       placeDescriptionVector.add(place_description);
+                       place_description="";
+                       place_title="";
+                       bSet_item = false;
+
+                   }
+               }
+
+                eventType = xpp.next();
+            }
+
+        }
+
+        catch(Exception e){
+
+        }
+
+
+
+*/
 
 

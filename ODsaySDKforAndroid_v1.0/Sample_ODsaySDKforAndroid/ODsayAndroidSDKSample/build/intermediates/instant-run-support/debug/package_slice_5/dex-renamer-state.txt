@@ -1,0 +1,4 @@
+#Sun Feb 04 17:26:31 KST 2018
+base.0=C\:\\android\\idolgo_workspace\\ODsaySDKforAndroid_v1.0\\Sample_ODsaySDKforAndroid\\ODsayAndroidSDKSample\\build\\intermediates\\transforms\\dexMerger\\debug\\5
+path.0=classes.dex
+renamed.0=classes.dex

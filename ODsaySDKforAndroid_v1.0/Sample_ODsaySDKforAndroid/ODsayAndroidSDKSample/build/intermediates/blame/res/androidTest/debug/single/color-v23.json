@@ -1,0 +1,42 @@
+[
+    {
+        "merged": "C:\\android\\idolgo_workspace\\ODsaySDKforAndroid_v1.0\\Sample_ODsaySDKforAndroid\\ODsayAndroidSDKSample\\build\\intermediates\\res\\merged\\androidTest\\debug\\color-v23\\abc_tint_spinner.xml",
+        "source": "C:\\Users\\세진\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-26.0.0-alpha1.aar\\c21b5c1be2051272d1216fd98129cf0b\\res\\color-v23\\abc_tint_spinner.xml"
+    },
+    {
+        "merged": "C:\\android\\idolgo_workspace\\ODsaySDKforAndroid_v1.0\\Sample_ODsaySDKforAndroid\\ODsayAndroidSDKSample\\build\\intermediates\\res\\merged\\androidTest\\debug\\color-v23\\abc_btn_colored_text_material.xml",
+        "source": "C:\\Users\\세진\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-26.0.0-alpha1.aar\\c21b5c1be2051272d1216fd98129cf0b\\res\\color-v23\\abc_btn_colored_text_material.xml"
+    },
+    {
+        "merged": "C:\\android\\idolgo_workspace\\ODsaySDKforAndroid_v1.0\\Sample_ODsaySDKforAndroid\\ODsayAndroidSDKSample\\build\\intermediates\\res\\merged\\androidTest\\debug\\color-v23\\abc_tint_switch_thumb.xml",
+        "source": "C:\\Users\\세진\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-26.0.0-alpha1.aar\\c21b5c1be2051272d1216fd98129cf0b\\res\\color-v23\\abc_tint_switch_thumb.xml"
+    },
+    {
+        "merged": "C:\\android\\idolgo_workspace\\ODsaySDKforAndroid_v1.0\\Sample_ODsaySDKforAndroid\\ODsayAndroidSDKSample\\build\\intermediates\\res\\merged\\androidTest\\debug\\color-v23\\abc_btn_colored_borderless_text_material.xml",
+        "source": "C:\\Users\\세진\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-26.0.0-alpha1.aar\\c21b5c1be2051272d1216fd98129cf0b\\res\\color-v23\\abc_btn_colored_borderless_text_material.xml"
+    },
+    {
+        "merged": "C:\\android\\idolgo_workspace\\ODsaySDKforAndroid_v1.0\\Sample_ODsaySDKforAndroid\\ODsayAndroidSDKSample\\build\\intermediates\\res\\merged\\androidTest\\debug\\color-v23\\abc_tint_btn_checkable.xml",
+        "source": "C:\\Users\\세진\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-26.0.0-alpha1.aar\\c21b5c1be2051272d1216fd98129cf0b\\res\\color-v23\\abc_tint_btn_checkable.xml"
+    },
+    {
+        "merged": "C:\\android\\idolgo_workspace\\ODsaySDKforAndroid_v1.0\\Sample_ODsaySDKforAndroid\\ODsayAndroidSDKSample\\build\\intermediates\\res\\merged\\androidTest\\debug\\color-v23\\abc_tint_switch_track.xml",
+        "source": "C:\\Users\\세진\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-26.0.0-alpha1.aar\\c21b5c1be2051272d1216fd98129cf0b\\res\\color-v23\\abc_tint_switch_track.xml"
+    },
+    {
+        "merged": "C:\\android\\idolgo_workspace\\ODsaySDKforAndroid_v1.0\\Sample_ODsaySDKforAndroid\\ODsayAndroidSDKSample\\build\\intermediates\\res\\merged\\androidTest\\debug\\color-v23\\abc_tint_default.xml",
+        "source": "C:\\Users\\세진\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-26.0.0-alpha1.aar\\c21b5c1be2051272d1216fd98129cf0b\\res\\color-v23\\abc_tint_default.xml"
+    },
+    {
+        "merged": "C:\\android\\idolgo_workspace\\ODsaySDKforAndroid_v1.0\\Sample_ODsaySDKforAndroid\\ODsayAndroidSDKSample\\build\\intermediates\\res\\merged\\androidTest\\debug\\color-v23\\abc_color_highlight_material.xml",
+        "source": "C:\\Users\\세진\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-26.0.0-alpha1.aar\\c21b5c1be2051272d1216fd98129cf0b\\res\\color-v23\\abc_color_highlight_material.xml"
+    },
+    {
+        "merged": "C:\\android\\idolgo_workspace\\ODsaySDKforAndroid_v1.0\\Sample_ODsaySDKforAndroid\\ODsayAndroidSDKSample\\build\\intermediates\\res\\merged\\androidTest\\debug\\color-v23\\abc_tint_edittext.xml",
+        "source": "C:\\Users\\세진\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-26.0.0-alpha1.aar\\c21b5c1be2051272d1216fd98129cf0b\\res\\color-v23\\abc_tint_edittext.xml"
+    },
+    {
+        "merged": "C:\\android\\idolgo_workspace\\ODsaySDKforAndroid_v1.0\\Sample_ODsaySDKforAndroid\\ODsayAndroidSDKSample\\build\\intermediates\\res\\merged\\androidTest\\debug\\color-v23\\abc_tint_seek_thumb.xml",
+        "source": "C:\\Users\\세진\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-26.0.0-alpha1.aar\\c21b5c1be2051272d1216fd98129cf0b\\res\\color-v23\\abc_tint_seek_thumb.xml"
+    }
+]

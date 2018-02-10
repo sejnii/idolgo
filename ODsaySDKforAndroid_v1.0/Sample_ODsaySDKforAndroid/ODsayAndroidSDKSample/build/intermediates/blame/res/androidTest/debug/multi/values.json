@@ -1,0 +1,26 @@
+[
+    {
+        "outputFile": "/Users/jamechoi/Desktop/AroProject/06.Aro-Android/ODsaySDKSampleForAndroid/ODsayAndroidSDKSample/build/intermediates/incremental/mergeDebugAndroidTestResources/merged.dir/values/values.xml",
+        "map": [
+            {
+                "to": {
+                    "startLine": 2,
+                    "startColumn": 4,
+                    "startOffset": 55,
+                    "endColumn": 45,
+                    "endOffset": 96
+                },
+                "from": {
+                    "file": "/Users/jamechoi/.android/build-cache/81ceae0218d2b3bbfdf38f345fc693d4ae695702/output/res/values/values.xml",
+                    "position": {
+                        "startLine": 4,
+                        "startColumn": 4,
+                        "startOffset": 229,
+                        "endColumn": 45,
+                        "endOffset": 270
+                    }
+                }
+            }
+        ]
+    }
+]

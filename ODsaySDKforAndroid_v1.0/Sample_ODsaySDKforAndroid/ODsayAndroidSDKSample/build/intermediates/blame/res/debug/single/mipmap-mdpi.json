@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "/Users/jamechoi/Desktop/AroProject/06.Aro-Android/ODsaySDKSampleForAndroid/ODsayAndroidSDKSample/build/intermediates/res/merged/debug/mipmap-mdpi/ic_launcher_round.png",
+        "source": "/Users/jamechoi/Desktop/AroProject/06.Aro-Android/ODsaySDKSampleForAndroid/ODsayAndroidSDKSample/src/main/res/mipmap-mdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "/Users/jamechoi/Desktop/AroProject/06.Aro-Android/ODsaySDKSampleForAndroid/ODsayAndroidSDKSample/build/intermediates/res/merged/debug/mipmap-mdpi/ic_launcher.png",
+        "source": "/Users/jamechoi/Desktop/AroProject/06.Aro-Android/ODsaySDKSampleForAndroid/ODsayAndroidSDKSample/src/main/res/mipmap-mdpi/ic_launcher.png"
+    }
+]

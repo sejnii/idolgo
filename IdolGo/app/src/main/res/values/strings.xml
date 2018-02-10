@@ -10,9 +10,24 @@
     <string name="categories6">Korean Wave</string>
     <string name="categories7">Nature</string>
     <string name="categories8">Museums</string>
+
     <string name="title_activity_maps">Map</string>
     <string name="total">Total</string>
     <string name="detailed">Detailed route</string>
     <string name="start">Start guidance</string>
 
+    <string name="lane1">#11228c</string>
+    <string name="lane2">#008637</string>
+    <string name="lane3">#fe4d01</string>
+    <string name="lane4">#0571b2</string>
+    <string name="lane5">#410074</string>
+    <string name="lane6">#cc5d03</string>
+    <string name="lane7">#3f4602</string>
+    <string name="lane8">#ef0381</string>
+    <string name="lane9">#c2a12e</string>
+    <string name="str_prompt_of_spinnerLocationProvider">aaaaaaaaaaaa</string>
+
+
+
+    <string name="odsay_key">plj4F9L9TJFgxZN1qzECWmmZtzy1hiKUKWuZySJ01RY</string>
 </resources>

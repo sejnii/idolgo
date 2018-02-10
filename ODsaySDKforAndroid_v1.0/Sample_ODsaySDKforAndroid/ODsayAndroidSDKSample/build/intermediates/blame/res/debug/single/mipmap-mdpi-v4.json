@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "C:\\android\\idolgo_workspace\\ODsaySDKforAndroid_v1.0\\Sample_ODsaySDKforAndroid\\ODsayAndroidSDKSample\\build\\intermediates\\res\\merged\\debug\\mipmap-mdpi-v4\\ic_launcher_round.png",
+        "source": "C:\\android\\idolgo_workspace\\ODsaySDKforAndroid_v1.0\\Sample_ODsaySDKforAndroid\\ODsayAndroidSDKSample\\src\\main\\res\\mipmap-mdpi\\ic_launcher_round.png"
+    },
+    {
+        "merged": "C:\\android\\idolgo_workspace\\ODsaySDKforAndroid_v1.0\\Sample_ODsaySDKforAndroid\\ODsayAndroidSDKSample\\build\\intermediates\\res\\merged\\debug\\mipmap-mdpi-v4\\ic_launcher.png",
+        "source": "C:\\android\\idolgo_workspace\\ODsaySDKforAndroid_v1.0\\Sample_ODsaySDKforAndroid\\ODsayAndroidSDKSample\\src\\main\\res\\mipmap-mdpi\\ic_launcher.png"
+    }
+]
