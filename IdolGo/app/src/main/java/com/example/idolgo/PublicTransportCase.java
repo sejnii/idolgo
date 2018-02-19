@@ -50,7 +50,8 @@ public class PublicTransportCase extends AppCompatActivity  {
     private JSONObject jsonObject;
     final int nll = 10000;
     Context context = this;
-    String startX, startY;
+
+    String startX ,startY;
     LocationManager manager;
     String pathArr[];
     String caseSubPathArr[][][];//path, subpath, (trafficType, num, color, time)
@@ -76,7 +77,7 @@ public class PublicTransportCase extends AppCompatActivity  {
        it_placename = it.getStringExtra("it_placename");
         // Acquire a reference to the system Location Manager
 
-        startLocationService();
+      startLocationService();
 
 
 
@@ -152,7 +153,7 @@ public class PublicTransportCase extends AppCompatActivity  {
 
         }
 
-        @Override
+
         public void onProviderDisabled(String s) {
 
         }
@@ -180,7 +181,7 @@ public class PublicTransportCase extends AppCompatActivity  {
                 pathcnt = jArrPath.length();
                 pathArr = new String[pathcnt];
                 caseSubPathArr = new String[pathcnt][][];
-                caseInfoArr = new int[pathcnt][4];
+                caseInfoArr = new int[pathcnt][5];
                 for (int i = 0; i < pathcnt; i++) {
                     JSONObject jsonPathObject = jArrPath.getJSONObject(i);
                     pathArr[i] = jsonPathObject.toString();
@@ -239,6 +240,7 @@ public class PublicTransportCase extends AppCompatActivity  {
                     Log.i("payment", ""+jObjInfo.getString("payment"));
                     caseInfoArr[i][3] = Integer.parseInt(jObjInfo.getString("busTransitCount")) + Integer.parseInt(jObjInfo.getString("subwayTransitCount"));
 
+                    caseInfoArr[i][4] = Integer.parseInt(jObjInfo.getString("totalDistance"));
                 }
 
                 Log.i("pathcnt", ""+pathcnt);
@@ -447,16 +449,24 @@ public class PublicTransportCase extends AppCompatActivity  {
                         @Override
                         public void onClick(View view) {
                             int id = view.getId();
-                            Intent it = new Intent(context,PublicTransportDetail.class);
+                            Intent it = new Intent(context,Tmap.class);
                             Log.i("id", ""+(id-nll));
                             it.putExtra("it_placename", it_placename);
+                            it.putExtra("it_time", ""+caseInfoArr[id-nll][0]);
+                            it.putExtra("it_distance", ""+caseInfoArr[id-nll][4]);
                             it.putExtra("it_path", pathArr[id-nll]);
+                            it.putExtra("it_startX", startX);
+                            it.putExtra("it_startY", startY);
+                            it.putExtra("it_endX",it_endX );
+                            it.putExtra("it_endY", it_endY);
                             startActivity(it);
 
                         }
                     });
 
-                    linearLayout.addView(ll);
+
+
+                        linearLayout.addView(ll);
 
                 }
 
