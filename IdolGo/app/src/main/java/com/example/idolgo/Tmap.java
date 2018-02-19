@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Entity;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -21,15 +20,18 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
+import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.skt.Tmap.TMapData;
@@ -88,96 +90,15 @@ public class Tmap extends FragmentActivity implements OnMapReadyCallback  {
 
     private GoogleMap mMap;
     private ArrayList<com.google.android.gms.maps.model.LatLng> mapPoints;
-
+    private MapView mapView = null;
     String strUrl;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maps);
+        setContentView(R.layout.activity_tmap);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
-
-        Intent it = getIntent();
-        String it_placename = it.getStringExtra("it_placename");
-        String it_time = it.getStringExtra("it_time");
-        String it_distance = it.getStringExtra("it_distance");
-        String it_path = it.getStringExtra("it_path");
-        String it_startX = it.getStringExtra("it_startX");
-        String it_startY = it.getStringExtra("it_startY");
-        String it_endX = it.getStringExtra("it_endX");
-        String it_endY = it.getStringExtra("it_endY");
-
-        try {
-            JSONObject jsonPathObject = new JSONObject(it_path);
-            JSONArray jArrSubpath = jsonPathObject.getJSONArray("subPath");
-            Log.i("subpatharr", jArrSubpath.toString());
-            int subpathcnt = jArrSubpath.length();
-            Double latlng[][] = new Double[subpathcnt][4];
-            int cnt = 0;
-            com.google.android.gms.maps.model.LatLng point = new com.google.android.gms.maps.model.LatLng(Double.parseDouble(it_startY), Double.parseDouble
-                    (it_startX));
-
-            mapPoints.add(point);
-            for (int j = 0; j < subpathcnt; j++) {
-               JSONObject  jsonObject = jArrSubpath.getJSONObject(j);
-                Log.i("subpath" + j, jsonObject.toString());
-                int trafficType = Integer.parseInt(jsonObject.getString("trafficType"));
-                Log.i("traffictype", "" + trafficType);
-                if (trafficType == 1 || trafficType == 2) {
-
-                    latlng[cnt][0] = Double.parseDouble(jsonObject.getString("startX"));
-                    latlng[cnt][1] = Double.parseDouble(jsonObject.getString("startY"));
-                    latlng[cnt][2] = Double.parseDouble(jsonObject.getString("endX"));
-                    latlng[cnt][3] = Double.parseDouble(jsonObject.getString("endY"));
-
-                }
-
-                point = new com.google.android.gms.maps.model.LatLng(latlng[cnt][1], latlng[cnt][0]);
-
-                mapPoints.add(point);
-                point = new com.google.android.gms.maps.model.LatLng(latlng[cnt][3], latlng[cnt][2]);
-
-                mapPoints.add(point);
-
-            }
-
-             point = new com.google.android.gms.maps.model.LatLng(Double.parseDouble(it_endY), Double.parseDouble
-                    (it_endX));
-
-            mapPoints.add(point);
-
-
-        }
-        catch(Exception e) {
-        }
-
-
-
-
-    PolylineOptions rectOptions = new PolylineOptions()
-            .addAll(mapPoints); // Closes the polyline.
-
-    // Get back the mutable Polyline
-    Polyline polyline = mMap.addPolyline(rectOptions);
-
-
-    TextView total = (TextView)findViewById(R.id.total);
-    int total_time = Integer.parseInt(it_time);
-    Double total_distance= Double.parseDouble(it_distance)/1000;
-
-    int total_hr, total_min;
-                    if(total_time>=60){
-        total_hr = total_time/60;
-        total_min = total_time%60;
-        total.setText("Total    "+total_hr+"hours "+total_min+"min  "+total_distance+"km");
-    }
-                    else{
-        total.setText("Total    "+total_time+"min  "+total_distance+"km");
-    }
-
-
 
 
         try{
@@ -187,235 +108,136 @@ public class Tmap extends FragmentActivity implements OnMapReadyCallback  {
                 "&startX=127.066847&startY=37.510350" +
                 "&endX=127.0254323&endY=37.497942" +
                 "&appKey=5a00bd31-9b20-44ce-a868-fc4696dfa3a1";
-    }
+        }
                 catch(Exception E){
 
+                }
+        new DownloadWebpageTask().execute(strUrl);
+
+
+        LatLng startPoint = new LatLng(127.066847, 37.510350);
+        LatLng endPoint = new LatLng(127.0254323,37.497942);
+      //  rt.getJsonData(startPoint,endPoint);
+
+        // 20.2.2
+
     }
-    //     new DownloadWebpageTask().execute(strUrl);
+
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 
 
-
-    LatLng startPoint = new LatLng(127.066847, 37.510350);
-    LatLng endPoint = new LatLng(127.0254323,37.497942);
-    //  rt.getJsonData(startPoint,endPoint);
-
-    // 20.2.2
-
-}
-
-private class DownloadWebpageTask extends AsyncTask<String, Void, String> {
+        View layout = inflater.inflate(R.layout.activity_tmap,container,false);
+        mapView = (MapView)layout.findViewById(R.id.map);
+        return layout;
+    }
 
 
-    protected String doInBackground(String... urls) {
+    private class DownloadWebpageTask extends AsyncTask<String, Void, String> {
 
-        try {
-            Log.i("tag", "doinbackground");
-            return (String) downloadUrl((String) urls[0]);
-        } catch (IOException e) {
-            return "다운로드 실패";
+
+        protected String doInBackground(String... urls) {
+
+            try {
+                Log.i("tag", "doinbackground");
+                return (String) downloadUrl((String) urls[0]);
+            } catch (IOException e) {
+                return "다운로드 실패";
+            }
         }
-    }
+
+        protected void onPostExecute(String result) {
+
+            int totalDistance=0;
+            try {
+                JSONObject jAr = new JSONObject(result);
 
 
+                JSONArray features = jAr.getJSONArray("features");
+
+                mapPoints = new ArrayList<>();
+                for (int i = 0; i < features.length(); i++) {
+                    JSONObject test2 = features.getJSONObject(i);
+                    if (i == 0) {
+                        JSONObject properties = test2.getJSONObject("properties");
+                        totalDistance += properties.getInt("totalDistance");
+                    }
+                    JSONObject geometry = test2.getJSONObject("geometry");
+                    JSONArray coordinates = geometry.getJSONArray("coordinates");
 
 
-
-    protected void onPostExecute(String result) {
-
-        int totalDistance=0;
-        try {
-            JSONObject jAr = new JSONObject(result);
+                    String geoType = geometry.getString("type");
+                    if (geoType.equals("Point")) {
+                        double lonJson = coordinates.getDouble(0);
+                        double latJson = coordinates.getDouble(1);
 
 
-            JSONArray features = jAr.getJSONArray("features");
-
-            mapPoints = new ArrayList<>();
-            for (int i = 0; i < features.length(); i++) {
-                JSONObject test2 = features.getJSONObject(i);
-                if (i == 0) {
-                    JSONObject properties = test2.getJSONObject("properties");
-                    totalDistance += properties.getInt("totalDistance");
-                }
-                JSONObject geometry = test2.getJSONObject("geometry");
-                JSONArray coordinates = geometry.getJSONArray("coordinates");
-
-
-                String geoType = geometry.getString("type");
-                if (geoType.equals("Point")) {
-                    double lonJson = coordinates.getDouble(0);
-                    double latJson = coordinates.getDouble(1);
-
-
-                    Log.d("long lat", lonJson + "," + latJson + "\n");
-                    com.google.android.gms.maps.model.LatLng point = new com.google.android.gms.maps.model.LatLng(latJson, lonJson);
-                    mapPoints.add(point);
-
-                }
-                if (geoType.equals("LineString")) {
-                    for (int j = 0; j < coordinates.length(); j++) {
-                        JSONArray JLinePoint = coordinates.getJSONArray(j);
-                        double lonJson = JLinePoint.getDouble(0);
-                        double latJson = JLinePoint.getDouble(1);
-
-
-                        Log.d("long, lat", lonJson + "," + latJson + "\n");
+                        Log.d("long lat", lonJson + "," + latJson + "\n");
                         com.google.android.gms.maps.model.LatLng point = new com.google.android.gms.maps.model.LatLng(latJson, lonJson);
-
                         mapPoints.add(point);
 
                     }
+                    if (geoType.equals("LineString")) {
+                        for (int j = 0; j < coordinates.length(); j++) {
+                            JSONArray JLinePoint = coordinates.getJSONArray(j);
+                            double lonJson = JLinePoint.getDouble(0);
+                            double latJson = JLinePoint.getDouble(1);
 
+
+                            Log.d("long, lat", lonJson + "," + latJson + "\n");
+                            com.google.android.gms.maps.model.LatLng point = new com.google.android.gms.maps.model.LatLng(latJson, lonJson);
+
+                            mapPoints.add(point);
+
+                        }
+                    }
                 }
             }
-        }
-        catch(Exception e){
+            catch(Exception e){
 
-        }
-
-        PolylineOptions rectOptions = new PolylineOptions()
-                .addAll(mapPoints); // Closes the polyline.
+            }
+            PolylineOptions rectOptions = new PolylineOptions()
+            .addAll(mapPoints); // Closes the polyline.
 
 // Get back the mutable Polyline
-        Polyline polyline = mMap.addPolyline(rectOptions);
+            Polyline polyline = mMap.addPolyline(rectOptions);
+
+        }
+        private String downloadUrl(String myurl) throws IOException {
 
 
+            Log.i("tag", "downloadURL");
+            String uri = myurl;
+            BufferedReader bufferedReader = null;
+            HttpURLConnection con=null;
+            try {
+                URL url = new URL(uri);
+                con = (HttpURLConnection) url.openConnection();
+                StringBuilder sb = new StringBuilder();
+                bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                String json;
+                while ((json = bufferedReader.readLine()) != null) {
+                    sb.append(json + "\n");
+                    Log.i("str", json);
+                }
 
-    }
-    private String downloadUrl(String myurl) throws IOException {
+                return sb.toString().trim();
 
-
-        Log.i("tag", "downloadURL");
-        String uri = myurl;
-        BufferedReader bufferedReader = null;
-        HttpURLConnection con=null;
-        try {
-            URL url = new URL(uri);
-            con = (HttpURLConnection) url.openConnection();
-            StringBuilder sb = new StringBuilder();
-            bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
-            String json;
-            while ((json = bufferedReader.readLine()) != null) {
-                sb.append(json + "\n");
-                Log.i("str", json);
+            } catch (Exception e) {
+                Log.i("err", "연결");
+                return null;
             }
 
-            return sb.toString().trim();
+            finally {
+                con.disconnect();
 
-        } catch (Exception e) {
-            Log.i("err", "연결");
-            return null;
-        }
+            }
 
-        finally {
-            con.disconnect();
 
         }
-
-
     }
-}
 
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
     }
 
-
-
- /*   detailed_route(View v){
-      //  Intent it = new Intent(context,PublicTransportDetail.class);
-
-        it.putExtra("it_placename", it_placename);
-        it.putExtra("it_path", it_path);
-        startActivity(it);
-    }*/
-
-
 }
-
-// NEW
-
-
-
-
-
-
-
-
-
-
-
-
-//////////////////백업용//////////////////////////////////
-
-
-
-
-
-
-
-
-
-
-/*
-                    Intent it = getIntent();
-                    String it_placename = it.getStringExtra("it_placename");
-                    String it_time = it.getStringExtra("it_time");
-                    String it_distance = it.getStringExtra("it_distance");
-                    String it_path = it.getStringExtra("it_path");
-
-
-                    JSONObject jsonPathObject = new JSONObject(it_path);
-                    JSONArray jArrSubpath = jsonPathObject.getJSONArray("subPath");
-                    Log.i("subpatharr", jArrSubpath.toString());
-                    subpathcnt = jArrSubpath.length();
-                    Double latlng[][] = new Double[subpathcnt][4];
-          latlng[
-                    int cnt=2;
-                    for (int j = 0; j < subpathcnt; j++) {
-                        jsonObject = jArrSubpath.getJSONObject(j);
-                        Log.i("subpath" + j, jsonObject.toString());
-                        int trafficType = Integer.parseInt(jsonObject.getString("trafficType"));
-                        Log.i("traffictype", "" + trafficType);
-                        if (trafficType == 1 || trafficType == 2) {
-
-                            latlng[cnt][0] = Double.parseDouble(jsonObject.getString("startX"));
-                            latlng[cnt][1] = Double.parseDouble(jsonObject.getString("startY"));
-                            latlng[cnt][2] = Double.parseDouble(jsonObject.getString("endX"));
-                            latlng[cnt][3] = Double.parseDouble(jsonObject.getString("endY"));
-
-
-                        }
-                    }
-
-                    TextView total = (TextView)findViewById(R.id.total);
-                    int total_time = Int.parseInt(it_time);
-                    int total_distance= Double.parse(it_distance)/1000;
-
-                    int total_hr, total_min;
-                    if(total_time>=60){
-                            total_hr = total_time/60;
-                            total_min = total_time%60;
-                            total.setText("Total    "+total_hr+"hours "+total_min+"min  "+total_distance+"km");
-                    }
-                    else{
-                    total.setText("Total    "+total_time+"min  "+total_distance+"km");
-                    }
-
-
-
-
-
-
-
-
-
-                    ///////////넘길 때 //////////////
-                    detailed_route(View v){
-                        Intent it = new Intent(context,PublicTransportDetail.class);
-
-                            it.putExtra("it_placename", it_placename);
-                            it.putExtra("it_path", it_path);
-                            startActivity(it);
-                      }
-
-*/
