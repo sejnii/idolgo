@@ -35,6 +35,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.Vector;
 
 public class PlaceInfo extends AppCompatActivity {
@@ -144,7 +145,14 @@ public class PlaceInfo extends AppCompatActivity {
                 if(vecdt.get(i).equals("• Address")) {
                     addr = vecdd.get(i);
                     address.setText(addr);
-                    new DownloadWebpageTask2().execute("https://maps.googleapis.com/maps/api/geocode/json?address=" + addr +"&key=AIzaSyDIv3KMuSLlyu4yV0M2g105H_7QLhtLywY");
+                    try {
+                        String query = URLEncoder.encode(addr, "utf-8");
+                        new DownloadWebpageTask2().execute("https://maps.googleapis.com/maps/api/geocode/json?address=" + query +"&key=AIzaSyDIv3KMuSLlyu4yV0M2g105H_7QLhtLywY");
+
+                    }
+                    catch(Exception e){
+
+                    }
 
                 }
                 else if(vecdt.get(i).equals("• Phone"))
@@ -235,6 +243,8 @@ public class PlaceInfo extends AppCompatActivity {
 
             Log.i("tag", "downloadURL");
             String uri = myurl;
+            Log.i("myurl", myurl);
+
             BufferedReader bufferedReader = null;
             HttpURLConnection con = null;
             try {
@@ -250,7 +260,8 @@ public class PlaceInfo extends AppCompatActivity {
                 return sb.toString().trim();
 
             } catch (Exception e) {
-                Log.i("err", "연결");
+                e.printStackTrace();
+                Log.i("err", e.toString());
                 return null;
             } finally {
                 con.disconnect();

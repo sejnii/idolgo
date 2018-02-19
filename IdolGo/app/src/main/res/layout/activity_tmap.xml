@@ -24,6 +24,9 @@
             >
             <TextView
                 android:id="@+id/total"
+                android:textSize="20sp"
+                android:layout_gravity="center"
+                android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:textColor="#ffffff"
@@ -82,6 +85,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:text="Start Guidance"
+                    android:clickable="true"
+                    android:onClick="goAr"
                     android:textSize="20sp"
                     android:gravity="center"
                     android:textColor="#ffffff"
