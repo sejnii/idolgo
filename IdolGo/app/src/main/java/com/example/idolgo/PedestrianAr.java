@@ -230,6 +230,12 @@ public class PedestrianAr extends AppCompatActivity implements SurfaceHolder.Cal
 
      }
 
+     public void onDestroy(){
+         super.onDestroy();
+         pas = null;
+
+
+     }
 
 
 
@@ -299,6 +305,8 @@ public class PedestrianAr extends AppCompatActivity implements SurfaceHolder.Cal
           camera.release();
           camera = null;
           previewing = false; }
+
+
 
 
 }

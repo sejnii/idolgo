@@ -166,7 +166,7 @@ public class Tmap extends FragmentActivity implements OnMapReadyCallback, Locati
         return (rad * 180.0 / Math.PI);
     }
 
-    public void goAr(View v){
+    public void goAr(View v){ 
 
 
         Boolean isfinal = false;
@@ -175,17 +175,18 @@ public class Tmap extends FragmentActivity implements OnMapReadyCallback, Locati
             Log.i("lat"+i, latlng[i][1]);
             Log.i("lon"+i, latlng[i][0]);
         }
-        double min = distance(Double.parseDouble(latlng[1][1]),Double.parseDouble(latlng[1][0]),location.getLatitude(), location.getLongitude());
+        double min = distance(Double.parseDouble(latlng[0][3]),Double.parseDouble(latlng[0][2]),location.getLatitude(), location.getLongitude());
 
         double minlat, minlon;
                 minlat= Double.parseDouble(latlng[1][1]);
                 minlon = Double.parseDouble(latlng[1][0]);
-        for(int i=2;i<=cnt;i++){
-            if(min > distance(Double.parseDouble(latlng[i][1]),Double.parseDouble(latlng[i][0]),location.getLatitude(), location.getLongitude())) {
-                min = distance(Double.parseDouble(latlng[i][1]), Double.parseDouble(latlng[i][0]), location.getLatitude(), location.getLongitude());
-                minlat = Double.parseDouble(latlng[i][1]);
-                minlon = Double.parseDouble(latlng[i][0]);
-                if(i==cnt)
+        for(int i=1;i<cnt;i++){
+            if(min > distance(Double.parseDouble(latlng[i][3]),Double.parseDouble(latlng[i][2]),location.getLatitude(), location.getLongitude())) {
+               Log.i("distance", ""+distance(Double.parseDouble(latlng[i][3]),Double.parseDouble(latlng[i][2]),location.getLatitude(), location.getLongitude()));
+                min = distance(Double.parseDouble(latlng[i][3]), Double.parseDouble(latlng[i][2]), location.getLatitude(), location.getLongitude());
+                minlat = Double.parseDouble(latlng[i+1][1]);
+                minlon = Double.parseDouble(latlng[i+1][0]);
+                if(i==cnt-1)
                     isfinal = true;
             }
               }

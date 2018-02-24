@@ -33,6 +33,7 @@ import java.util.ArrayList;
 public class PinkArrowSetting implements SensorEventListener, LocationListener{
 
 
+    Boolean destdist=false;//목적지에 도착했을 때 한 번만 toast뜨고, 다이얼로그 창 뜨게(onlocationchanged 안에 있어서 위치가 바뀔 때마다 다이얼로그 창이떠서 에러 나는 듯해서 하는 시도)
     SensorManager sensorManager;
     Sensor sensor;
     Context context;
@@ -304,10 +305,12 @@ public class PinkArrowSetting implements SensorEventListener, LocationListener{
 
 
                 }
+
             if (destDist <= 5) {//최종목적지까지 거리
+                if(destdist ==false) {
                     Toast.makeText(context, "목적지도착", Toast.LENGTH_LONG).show();
 
-                  if (isfinal==true) {
+                    if (isfinal == true) {
 
                         new MaterialDialog.Builder(context).title("Arrived At Your Final Destination").
                                 content("Do you want to get nearby facilities information?").
@@ -315,10 +318,10 @@ public class PinkArrowSetting implements SensorEventListener, LocationListener{
                                 onPositive(new MaterialDialog.SingleButtonCallback() {
                                     @Override
                                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                        Intent it = new Intent(context,NearByInfo.class);
+                                        Intent it = new Intent(context, NearByInfo.class);
                                         it.putExtra("it_endlat", endlat);
                                         it.putExtra("it_endlong", endlong);
-                                        activity.finish();
+                                        // activity.finish();
                                         context.startActivity(it);
                                     }
                                 }).
@@ -327,12 +330,32 @@ public class PinkArrowSetting implements SensorEventListener, LocationListener{
                                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                         Intent it = new Intent(context, Categories.class);
                                         it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                        activity.finish();
+                                        //  activity.finish();
                                         context.startActivity(it);
                                     }
                                 }).backgroundColor(Color.parseColor("#bbbcbf")).show();
 
+                    } else {
+                        Toast.makeText(context, "목적지도착", Toast.LENGTH_LONG).show();
+                        if (isfinal == false) {
+                            new MaterialDialog.Builder(context).title("Arrived At Your Destination").content("End the AR guidance service")
+                                    .positiveText("Confirm").onPositive(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                    activity.finish();
+
+                                }
+                            }).backgroundColor(Color.parseColor("#bbbcbf")).cancelable(false).canceledOnTouchOutside(false).show();
+                        }
+
+
                     }
+
+                    destdist = true;
+
+                }
+
+
                 }
 
                }
