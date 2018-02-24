@@ -22,9 +22,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key" />
+            android:value="AIzaSyBa7eZ7HHfIFhMr4c_aFYj_yeENWcs3Juo"/>
 
         <activity android:name=".Categories">
             <intent-filter>
@@ -40,7 +42,8 @@
         <activity android:name=".ODSaySample" />
         <activity android:name=".PublicTransportDetail" />
         <activity android:name=".PedestrianAr" />
-        <activity android:name=".WebInfo"></activity>
+        <activity android:name=".NearByInfo"/>
+
     </application>
 
 </manifest>

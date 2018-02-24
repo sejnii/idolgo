@@ -69,8 +69,7 @@ public class PlaceList extends AppCompatActivity {
     final int ndistance = 50000;
     Context context = this;
 
-    String it_cat = "Top10";
-
+    String it_cat="Top10";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,6 +80,8 @@ public class PlaceList extends AppCompatActivity {
         it_cat = it.getStringExtra("it_cat");
 
 
+
+
         listLayout = (LinearLayout) findViewById(R.id.dynamicList);
         //if(it_dc.equals(it facilities))
         spotList = new ArrayList<HashMap<String, String>>();
@@ -88,7 +89,7 @@ public class PlaceList extends AppCompatActivity {
 
         // String strUrl = "http://contents.visitseoul.net/file_save/rss/0004003002004en.xml";
 
-        new DownloadWebpageTask().execute("http://192.168.26.244/PHP_connection.php");
+        new DownloadWebpageTask().execute("http://192.168.20.96/PHP_connection.php");
 
 
     }
@@ -106,6 +107,9 @@ public class PlaceList extends AppCompatActivity {
                 return "다운로드 실패";
             }
         }
+
+
+
 
 
         protected void onPostExecute(String result) {
@@ -136,9 +140,10 @@ public class PlaceList extends AppCompatActivity {
                 // TODO: handle exception
             }
 
-            int cnt = 1;
+
+            int cnt=1;
             for (int i = 0; i < placeNameVector.size(); i++) {
-                if (placeCategoryVector.get(i).equals(it_cat)) {
+                if(placeCategoryVector.get(i).equals(it_cat)) {
                     Log.i("vector num", Integer.toString(i));
                     Log.i("cat vector", (String) placeCategoryVector.elementAt(i));
                     Log.i("name vector", (String) placeNameVector.elementAt(i));
@@ -165,7 +170,7 @@ public class PlaceList extends AppCompatActivity {
 
 
                     ImageView pic = new ImageView(context);
-                    picnum = npic + i;
+                    picnum = npic+i;
                     pic.setId(npic + i);
 
 
@@ -175,7 +180,7 @@ public class PlaceList extends AppCompatActivity {
                     num.setLayoutParams(layparam);
                     num.setGravity(Gravity.CENTER);
                     pic.setBackground(new ShapeDrawable(new OvalShape()));
-                    if (Build.VERSION.SDK_INT >= 21) {
+                    if(Build.VERSION.SDK_INT >= 21) {
                         pic.setClipToOutline(true);
                     }
 
@@ -211,11 +216,11 @@ public class PlaceList extends AppCompatActivity {
                         @Override
                         public void onClick(View view) {
                             int id = view.getId();
-                            Intent it = new Intent(context, PlaceInfo.class);
-                            Log.i("id", "" + (id - nll));
-                            it.putExtra("it_url", (String) placeUrlVector.get(id - nll));
-                            it.putExtra("it_category", (String) placeCategoryVector.get(id - nll));
-                            it.putExtra("it_name", (String) placeNameVector.get(id - nll));
+                            Intent it = new Intent(context,PlaceInfo.class);
+                            Log.i("id", ""+(id-nll));
+                            it.putExtra("it_url", (String)placeUrlVector.get(id-nll));
+                            it.putExtra("it_category", (String)placeCategoryVector.get(id-nll));
+                            it.putExtra("it_name", (String) placeNameVector.get(id-nll));
                             startActivity(it);
 
                         }
@@ -237,7 +242,7 @@ public class PlaceList extends AppCompatActivity {
             Log.i("tag", "downloadURL");
             String uri = myurl;
             BufferedReader bufferedReader = null;
-            HttpURLConnection con = null;
+            HttpURLConnection con=null;
             try {
                 URL url = new URL(uri);
                 con = (HttpURLConnection) url.openConnection();
@@ -254,15 +259,24 @@ public class PlaceList extends AppCompatActivity {
             } catch (Exception e) {
                 Log.i("err", "연결");
                 return null;
-            } finally {
+            }
+
+            finally {
                 con.disconnect();
 
             }
+
+
         }
     }
 
 
-    private class DownloadWebpageTask2 extends DownloadWebpageTask {
+
+
+
+
+
+    private class DownloadWebpageTask2 extends DownloadWebpageTask{
 
 
         protected String doInBackground(String... urls) {
@@ -274,11 +288,9 @@ public class PlaceList extends AppCompatActivity {
                 return "다운로드 실패";
             }
         }
-
         Elements element;
 
         String imgurl;
-
         private String downloadUrl(String myurl) throws IOException {
 
             try {
@@ -289,16 +301,25 @@ public class PlaceList extends AppCompatActivity {
                 imgurl = element.attr("src");
 
                 Log.i("imgurl", imgurl);
-                return "http://english.visitseoul.net" + imgurl + ".jpg";
+                return "http://english.visitseoul.net"+imgurl+".jpg";
             } catch (Exception e) {
                 return null;
             }
+
+
+
 
         }
 
         protected void onPostExecute(String result) {
 
+
+
+
+
         }
+
+
 
     }
 
@@ -378,5 +399,4 @@ public class PlaceList extends AppCompatActivity {
 
 
 */
-
 
