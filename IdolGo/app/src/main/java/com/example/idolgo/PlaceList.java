@@ -89,7 +89,7 @@ public class PlaceList extends AppCompatActivity {
 
         // String strUrl = "http://contents.visitseoul.net/file_save/rss/0004003002004en.xml";
 
-        new DownloadWebpageTask().execute("http://172.30.1.48/PHP_connection.php");
+        new DownloadWebpageTask().execute("http://192.168.20.96/PHP_connection.php");
 
 
     }

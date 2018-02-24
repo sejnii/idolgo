@@ -32,6 +32,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Polyline;
@@ -88,14 +90,19 @@ import static java.net.Proxy.Type.HTTP;
 
 
 
-public class Tmap extends FragmentActivity implements OnMapReadyCallback {
+public class Tmap extends FragmentActivity implements OnMapReadyCallback, LocationListener {
     PolylineOptions rectOptions;
 
+    int cnt = 0;
+    Location location;
+    LocationManager manager;
+    Double latitude, longitude;
     private MapView mapView = null;
     Context context = this;
     private GoogleMap mMap;
     private ArrayList<ArrayList<com.google.android.gms.maps.model.LatLng>> mapPoints;
 
+    String latlng[][];
     String it_startX, it_startY, it_endX, it_endY;
    int polycnt=0;
     String it_placename,it_path;
@@ -134,10 +141,63 @@ public class Tmap extends FragmentActivity implements OnMapReadyCallback {
 
 
     }
+
+    private double distance(double lat1, double lon1, double lat2, double lon2) {
+        double theta = lon1 - lon2;
+        double dist = Math.sin(deg2rad(lat1))
+                * Math.sin(deg2rad(lat2))
+                + Math.cos(deg2rad(lat1))
+                * Math.cos(deg2rad(lat2))
+                * Math.cos(deg2rad(theta));
+        dist = Math.acos(dist);
+        dist = rad2deg(dist);
+        dist = dist * 60 * 1.1515;
+        dist = dist * 1.609344;//mile->km
+        dist = dist * 1000;//km -> m
+        dist = Math.round((dist*100)/100.0);
+        return (dist);
+    }
+
+    private double deg2rad(double deg) {
+        return (deg * Math.PI / 180.0);
+    }
+
+    private double rad2deg(double rad) {
+        return (rad * 180.0 / Math.PI);
+    }
+
     public void goAr(View v){
+
+
+        Boolean isfinal = false;
+        for(int i=1;i<=cnt;i++)
+        {
+            Log.i("lat"+i, latlng[i][1]);
+            Log.i("lon"+i, latlng[i][0]);
+        }
+        double min = distance(Double.parseDouble(latlng[1][1]),Double.parseDouble(latlng[1][0]),location.getLatitude(), location.getLongitude());
+
+        double minlat, minlon;
+                minlat= Double.parseDouble(latlng[1][1]);
+                minlon = Double.parseDouble(latlng[1][0]);
+        for(int i=2;i<=cnt;i++){
+            if(min > distance(Double.parseDouble(latlng[i][1]),Double.parseDouble(latlng[i][0]),location.getLatitude(), location.getLongitude())) {
+                min = distance(Double.parseDouble(latlng[i][1]), Double.parseDouble(latlng[i][0]), location.getLatitude(), location.getLongitude());
+                minlat = Double.parseDouble(latlng[i][1]);
+                minlon = Double.parseDouble(latlng[i][0]);
+                if(i==cnt)
+                    isfinal = true;
+            }
+              }
+
+              Log.i("minlat", ""+minlat);
+        Log.i("minlon", ""+minlon);
+
+
         Intent it = new Intent(this, PedestrianAr.class);
-        it.putExtra("it_endX", it_endX2);
-        it.putExtra("it_endY", it_endY2);
+        it.putExtra("it_endX", ""+minlon);
+        it.putExtra("it_endY", ""+minlat);
+        it.putExtra("it_isfinal", isfinal);
         startActivity(it);
 
 
@@ -158,6 +218,7 @@ public class Tmap extends FragmentActivity implements OnMapReadyCallback {
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        startLocationService();
 
         Intent it = getIntent();
         it_placename = it.getStringExtra("it_placename");
@@ -177,11 +238,11 @@ public class Tmap extends FragmentActivity implements OnMapReadyCallback {
             int subpathcnt = jArrSubpath.length();
             Log.i("subpathcnt", "" + subpathcnt);
 
-            String latlng[][] = new String[subpathcnt][6];//startx, starty, endx, endy, traffictype, jsonobj : passstop
+            latlng = new String[subpathcnt][6];//startx, starty, endx, endy, traffictype, jsonobj : passstop
 
 
             Log.i("1", "1");
-            int cnt = 0;
+            cnt=0;
             latlng[cnt][2] = it_startX;
             latlng[cnt][3] = it_startY;
             latlng[cnt][4] = "" + 3;
@@ -329,10 +390,116 @@ Log.i("cnt 개수", ""+cnt);
 
 
 
+    private Location startLocationService() {
+
+        Log.i("startlocaionservice", "start");
+        manager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+
+        long minTime = 1000;
+        float minDistance = 1;
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(context, "need permission", Toast.LENGTH_LONG);
+
+            return null;
+        } else {
+            if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER))
+                showSettingsAlert();
+        }
+
+        Boolean isGPSEnabled = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+
+        // 현재 네트워크 상태 값 알아오기
+        Boolean isNetworkEnabled = manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+
+
+        Log.i("gps",""+isGPSEnabled);
+        Log.i("net", ""+isNetworkEnabled);
+        Log.i("startlocaionservice2", "start22222222222222");
+
+
+        if (isNetworkEnabled) {
+            manager.requestLocationUpdates(
+                    LocationManager.NETWORK_PROVIDER,
+                    1000,
+                    1, this);
+
+            if (manager != null) {
+                location = manager
+                        .getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                if (location != null) {
+                    // 위도 경도 저장
+                    latitude = location.getLatitude();
+                    longitude = location.getLongitude();
+                }
+            }
+        }
+
+        if (isGPSEnabled) {
+
+
+            if (location == null) {
+                manager.requestLocationUpdates(
+                        LocationManager.GPS_PROVIDER,
+                        1000,
+                        1, this);
+                if (manager != null) {
+                    location = manager
+                            .getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                    if (location != null) {
+                        latitude = location.getLatitude();
+                        longitude = location.getLongitude();
+                    }
+                }
+            }
+        }
+
+        Log.i("lat", "" + latitude);
+        Log.i("long", "" + longitude);
+
+        manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, minTime, minDistance, this);
+        manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, minTime, minDistance, this);
+
+        return location;
+
+    }
+    public void showSettingsAlert() {
+        {
+            // GPS OFF 일때 Dialog 표시
+            new MaterialDialog.Builder(context).title("Location Service Settings").content("Setting GPS Service").positiveText("Confirm").onPositive(new MaterialDialog.SingleButtonCallback() {
+                @Override
+                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                    // GPS설정 화면으로 이동
+                    Intent intent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    intent.addCategory(Intent.CATEGORY_DEFAULT);
+                    context.startActivity(intent);
+                }
+            }).backgroundColor(Color.parseColor("#bbbcbf")).cancelable(false).canceledOnTouchOutside(false).show();
+
+        }
+    }
+
+
+        public void onLocationChanged(Location location) {
+
+
+    }
+
+    public void onStatusChanged(String s, int i, Bundle bundle){
+
+    }
 
 
 
 
+    @Override
+    public void onProviderEnabled(String s) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String s) {
+
+    }
 
 
 

@@ -42,6 +42,7 @@ public class PinkArrowSetting implements SensorEventListener, LocationListener{
     int cntpoint=0;
     float mybearing;
     Double endlat, endlong;
+    Boolean isfinal;
     Double destDist;
     ImageView pinkarrow;
     Double latitude, longitude;
@@ -77,7 +78,7 @@ public class PinkArrowSetting implements SensorEventListener, LocationListener{
                 Double pointDistance = distance(latitude, longitude, pathPoints.get(cntpoint).getLatitude(), pathPoints.get(cntpoint).getLongitude());
                Log.i("pointdistnace", ""+pointDistance);
                 destDist = distance(latitude, longitude, endlat, endlong);
-                tv2.setText(destDist+"m");
+                tv2.setText("About "+destDist+"m");
                Log.i("destdist", ""+destDist);
              Log.i("pathpoint 몇개?", ""+cntpoint);
 
@@ -87,7 +88,7 @@ public class PinkArrowSetting implements SensorEventListener, LocationListener{
 
                 }
                 else {
-                    tv1str = pointDistance + "m";
+                    tv1str = "About "+pointDistance + "m";
                     tv1.setText(tv1str);
                 }
 
@@ -251,6 +252,7 @@ public class PinkArrowSetting implements SensorEventListener, LocationListener{
         dist = dist * 60 * 1.1515;
         dist = dist * 1.609344;//mile->km
         dist = dist * 1000;//km -> m
+        dist = Math.round((dist*100)/100.0);
         return (dist);
     }
 
@@ -302,11 +304,41 @@ public class PinkArrowSetting implements SensorEventListener, LocationListener{
 
 
                 }
-                if (destDist <= 5)//최종목적지까지 거리
+            if (destDist <= 5) {//최종목적지까지 거리
                     Toast.makeText(context, "목적지도착", Toast.LENGTH_LONG).show();
 
+                  if (isfinal==true) {
 
-            }
+                        new MaterialDialog.Builder(context).title("Arrived At Your Final Destination").
+                                content("Do you want to get nearby facilities information?").
+                                positiveText("Yes").negativeText("No").
+                                onPositive(new MaterialDialog.SingleButtonCallback() {
+                                    @Override
+                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                        Intent it = new Intent(context,NearByInfo.class);
+                                        it.putExtra("it_endlat", endlat);
+                                        it.putExtra("it_endlong", endlong);
+                                        context.startActivity(it);
+                                    }
+                                }).
+                                onNegative(new MaterialDialog.SingleButtonCallback() {
+                                    @Override
+                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                        Intent it = new Intent(context, Categories.class);
+                                        it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                        context.startActivity(it);
+                                    }
+                                }).backgroundColor(Color.parseColor("#bbbcbf")).show();
+
+                    }
+                }
+
+               }
+
+
+
+
+
         }
 
         public void onStatusChanged(String s, int i, Bundle bundle){
