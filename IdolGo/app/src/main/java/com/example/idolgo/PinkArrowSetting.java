@@ -318,6 +318,7 @@ public class PinkArrowSetting implements SensorEventListener, LocationListener{
                                         Intent it = new Intent(context,NearByInfo.class);
                                         it.putExtra("it_endlat", endlat);
                                         it.putExtra("it_endlong", endlong);
+                                        activity.finish();
                                         context.startActivity(it);
                                     }
                                 }).
@@ -326,6 +327,7 @@ public class PinkArrowSetting implements SensorEventListener, LocationListener{
                                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                         Intent it = new Intent(context, Categories.class);
                                         it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                        activity.finish();
                                         context.startActivity(it);
                                     }
                                 }).backgroundColor(Color.parseColor("#bbbcbf")).show();
