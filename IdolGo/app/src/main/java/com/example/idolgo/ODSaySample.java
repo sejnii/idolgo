@@ -29,11 +29,8 @@ public class ODSaySample extends AppCompatActivity {
     private RadioButton rb_json, rb_map;
     private Button bt_api_call;
     private EditText tv_data;
-
     private Context context;
     private String spinnerSelectedName;
-
-
     private ODsayService odsayService;
     private JSONObject jsonObject;
     private Map mapObject;
@@ -44,8 +41,6 @@ public class ODSaySample extends AppCompatActivity {
         setContentView(R.layout.activity_odsay_sample);
 
         init();
-
-
 
     }
 

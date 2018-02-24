@@ -24,15 +24,16 @@ public class PublicTransportDetail extends AppCompatActivity {
     Context context = this;
     int subpathcnt;
     LinearLayout public_transport_deatail_linear;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_public_transport_detail);
 
-        public_transport_deatail_linear = (LinearLayout)findViewById(R.id.detail_linear);
+        public_transport_deatail_linear = (LinearLayout) findViewById(R.id.detail_linear);
         Intent it = getIntent();
         it_path = it.getStringExtra("it_path");
-        Log.i("it_path",it_path);
+        Log.i("it_path", it_path);
         it_placename = it.getStringExtra("it_placename");
         Log.i("it_placename", it_placename);
         JSONObject jsonObject;
@@ -44,21 +45,19 @@ public class PublicTransportDetail extends AppCompatActivity {
             subpathArr = new String[subpathcnt][8];
             for (int j = 0; j < subpathcnt; j++) {
                 jsonObject = jArrSubpath.getJSONObject(j);
-                Log.i("subpath"+j , jsonObject.toString());
+                Log.i("subpath" + j, jsonObject.toString());
                 int trafficType = Integer.parseInt(jsonObject.getString("trafficType"));
-                subpathArr[j][0] = ""+trafficType;
-                Log.i("traffictype", ""+trafficType);
+                subpathArr[j][0] = "" + trafficType;
+                Log.i("traffictype", "" + trafficType);
 
                 if (trafficType == 3) {//도보
                     int walktime = Integer.parseInt(jsonObject.getString("sectionTime"));
-                    Log.i("walkstime", ""+walktime);
+                    Log.i("walkstime", "" + walktime);
                     walktotaltime += walktime;
                     int distance = Integer.parseInt(jsonObject.getString("distance"));
-                    subpathArr[j][2]=""+distance;
-                   subpathArr[j][1] = ""+walktime;
-                }
-
-                else if (trafficType == 1) {//지하철
+                    subpathArr[j][2] = "" + distance;
+                    subpathArr[j][1] = "" + walktime;
+                } else if (trafficType == 1) {//지하철
                     String stationCount = jsonObject.getString("stationCount");
                     subpathArr[j][5] = stationCount;
                     Log.i("stationCount", stationCount);
@@ -73,10 +72,10 @@ public class PublicTransportDetail extends AppCompatActivity {
                     Log.i("lane", lane.toString());
                     int subwaycode = Integer.parseInt(lane.getString("subwayCode"));
                     Log.i("subwaycode", "" + subwaycode);
-                    subpathArr[j][6] = ""+subwaycode;
-                    subpathArr[j][7] = ""+subwaycode;
+                    subpathArr[j][6] = "" + subwaycode;
+                    subpathArr[j][7] = "" + subwaycode;
                     int walktime = Integer.parseInt(jsonObject.getString("sectionTime"));
-                    subpathArr[j][1] = ""+walktime;
+                    subpathArr[j][1] = "" + walktime;
 
                 } else if (trafficType == 2) {//버스
                     String stationCount = jsonObject.getString("stationCount");
@@ -92,16 +91,15 @@ public class PublicTransportDetail extends AppCompatActivity {
                     JSONObject lane = jArrLane.getJSONObject(0);
                     Log.i("buslane", lane.toString());
                     String busNo = lane.getString("busNo");
-                    Log.i("busNo", ""+busNo);
+                    Log.i("busNo", "" + busNo);
                     int type = Integer.parseInt(lane.getString("type"));
-                    Log.i("type", ""+type);
+                    Log.i("type", "" + type);
                     subpathArr[j][6] = busNo;
-                    subpathArr[j][7] = ""+type;
+                    subpathArr[j][7] = "" + type;
                     int walktime = Integer.parseInt(jsonObject.getString("sectionTime"));
-                    subpathArr[j][1] = ""+walktime;
+                    subpathArr[j][1] = "" + walktime;
 
                 }
-
 
             }
 
@@ -110,23 +108,22 @@ public class PublicTransportDetail extends AppCompatActivity {
             caseInfoArr[0] = Integer.parseInt(jObjInfo.getString("totalTime"));
             Log.i("totalTime", jObjInfo.getString("totalTime"));
             caseInfoArr[1] = walktotaltime;
-            Log.i("walktotal", ""+caseInfoArr[1]);
+            Log.i("walktotal", "" + caseInfoArr[1]);
             caseInfoArr[2] = Integer.parseInt(jObjInfo.getString("payment"));
-            Log.i("payment", ""+jObjInfo.getString("payment"));
+            Log.i("payment", "" + jObjInfo.getString("payment"));
             caseInfoArr[3] = Integer.parseInt(jObjInfo.getString("busTransitCount")) + Integer.parseInt(jObjInfo.getString("subwayTransitCount"));
 
-            for(int i=0;i<subpathcnt;i++){
-                for(int j=0;j<8;j++){
-                    Log.i("subpatharr"+i+j, subpathArr[i][j]);
+            for (int i = 0; i < subpathcnt; i++) {
+                for (int j = 0; j < 8; j++) {
+                    Log.i("subpatharr" + i + j, subpathArr[i][j]);
                 }
             }
 
-            for(int i=0;i<4;i++){
-                Log.i("info"+i, ""+caseInfoArr[i]);
+            for (int i = 0; i < 4; i++) {
+                Log.i("info" + i, "" + caseInfoArr[i]);
             }
 
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
 
         }
 //////////////////////////////subpath배열 넣기 끝 layout 만들기 시작////////////////////////////////
@@ -135,7 +132,7 @@ public class PublicTransportDetail extends AppCompatActivity {
         ll.setOrientation(LinearLayout.VERTICAL);
         LinearLayout.LayoutParams layparam = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 300);
         ll.setBackground(getResources().getDrawable(R.drawable.information_border));
-        layparam.setMargins(10,10,10,10);
+        layparam.setMargins(10, 10, 10, 10);
         ll.setLayoutParams(layparam);
 
 //////////////////////////////////////////////////////////
@@ -149,13 +146,12 @@ public class PublicTransportDetail extends AppCompatActivity {
         layparam = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         layparam.setMargins(10, 10, 40, 10);
         layparam.gravity = Gravity.LEFT;
-        if(caseInfoArr[0] >= 60) {
+        if (caseInfoArr[0] >= 60) {
             int hour = caseInfoArr[0] / 60;
-            int min =caseInfoArr[0] % 60;
-            time.setText(hour+" hr " + min + " min");
+            int min = caseInfoArr[0] % 60;
+            time.setText(hour + " hr " + min + " min");
 
-        }
-        else
+        } else
             time.setText(caseInfoArr[0] + " min");
         time.setTextSize(25);
         time.setTextColor(Color.parseColor("#000000"));
@@ -185,7 +181,7 @@ public class PublicTransportDetail extends AppCompatActivity {
         ll3.setLayoutParams(layparam);
         ll3.setGravity(Gravity.LEFT);
 
-        int subwaybuscnt=0;
+        int subwaybuscnt = 0;
         for (int j = 0; j < subpathcnt; j++) {
             ImageView lane_pic = new ImageView(context);
             layparam = new LinearLayout.LayoutParams(90, 90);
@@ -239,7 +235,7 @@ public class PublicTransportDetail extends AppCompatActivity {
                 ll3.addView(lane_pic);
                 ll3.addView(lane);
 
-                if(subwaybuscnt != caseInfoArr[3]) {
+                if (subwaybuscnt != caseInfoArr[3]) {
                     TextView tvnext = new TextView(context);
                     layparam = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                     layparam.setMargins(10, 10, 10, 10);
@@ -249,8 +245,6 @@ public class PublicTransportDetail extends AppCompatActivity {
                     tvnext.setText(">");
                     ll3.addView(tvnext);
                 }
-
-
 
             }
 
@@ -263,7 +257,7 @@ public class PublicTransportDetail extends AppCompatActivity {
                 layparam.gravity = Gravity.CENTER_VERTICAL;
                 lane.setLayoutParams(layparam);
                 lane.setTextSize(15);
-                lane.setText(""+subpathArr[j][6]);
+                lane.setText("" + subpathArr[j][6]);
                 lane.setTextColor(Color.parseColor("#ffffff"));
                 switch (Integer.parseInt(subpathArr[j][7])) {
                     case 1://일반버스
@@ -290,9 +284,9 @@ public class PublicTransportDetail extends AppCompatActivity {
                 ll3.addView(lane_pic);
                 ll3.addView(lane);
 
-                Log.i("subwaybustransittotal"+j,""+caseInfoArr[3] );
-                Log.i("cnt", ""+subwaybuscnt);
-                if(subwaybuscnt != caseInfoArr[3]) {
+                Log.i("subwaybustransittotal" + j, "" + caseInfoArr[3]);
+                Log.i("cnt", "" + subwaybuscnt);
+                if (subwaybuscnt != caseInfoArr[3]) {
                     TextView tvnext = new TextView(context);
                     layparam = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                     layparam.setMargins(10, 10, 10, 10);
@@ -304,9 +298,6 @@ public class PublicTransportDetail extends AppCompatActivity {
                     ll3.addView(tvnext);
 
                 }
-
-
-
             }
         }
 
@@ -323,7 +314,7 @@ public class PublicTransportDetail extends AppCompatActivity {
         ll.setOrientation(LinearLayout.HORIZONTAL);
         layparam = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 200);
         ll.setBackground(getResources().getDrawable(R.drawable.information_border));
-        layparam.setMargins(10,10,10,10);
+        layparam.setMargins(10, 10, 10, 10);
         ll.setLayoutParams(layparam);
 
 
@@ -353,18 +344,16 @@ public class PublicTransportDetail extends AppCompatActivity {
 
         ///////////////////subpath detail한 부분 시작//////////////////////////
 
-        for(int i=0;i<subpathArr.length;i++){
+        for (int i = 0; i < subpathArr.length; i++) {
 
 
-
-
-            if(Integer.parseInt(subpathArr[i][0])==3){//도보일 때
+            if (Integer.parseInt(subpathArr[i][0]) == 3) {//도보일 때
 
                 ll = new LinearLayout(context);
                 ll.setOrientation(LinearLayout.HORIZONTAL);
                 layparam = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 200);
                 ll.setBackground(getResources().getDrawable(R.drawable.information_border));
-                layparam.setMargins(10,10,10,10);
+                layparam.setMargins(10, 10, 10, 10);
                 ll.setLayoutParams(layparam);
 
                 ImageView walk_pic = new ImageView(context);
@@ -379,7 +368,7 @@ public class PublicTransportDetail extends AppCompatActivity {
                 layparam.setMargins(10, 10, 10, 10);
                 layparam.gravity = Gravity.CENTER_VERTICAL;
                 tv_walk.setLayoutParams(layparam);
-                tv_walk.setText("Walk   "+subpathArr[i][1]+"min,  "+subpathArr[i][2]+"m");
+                tv_walk.setText("Walk   " + subpathArr[i][1] + "min,  " + subpathArr[i][2] + "m");
                 tv_walk.setTextSize(15);
 
                 ll.addView(walk_pic);
@@ -387,15 +376,13 @@ public class PublicTransportDetail extends AppCompatActivity {
 
                 public_transport_deatail_linear.addView(ll);
 
-            }
-
-            else if(Integer.parseInt(subpathArr[i][0])==1) {//지하철일 때
+            } else if (Integer.parseInt(subpathArr[i][0]) == 1) {//지하철일 때
 
                 ll = new LinearLayout(context);
                 ll.setOrientation(LinearLayout.HORIZONTAL);
                 layparam = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 200);
                 ll.setBackground(getResources().getDrawable(R.drawable.information_border));
-                layparam.setMargins(10,10,10,10);
+                layparam.setMargins(10, 10, 10, 10);
                 ll.setLayoutParams(layparam);
 
                 TextView tv_start_station = new TextView(context);
@@ -404,19 +391,18 @@ public class PublicTransportDetail extends AppCompatActivity {
                 layparam.gravity = Gravity.CENTER;
                 tv_start_station.setGravity(Gravity.CENTER);
                 tv_start_station.setLayoutParams(layparam);
-                tv_start_station.setText(subpathArr[i][3]+" Station");
+                tv_start_station.setText(subpathArr[i][3] + " Station");
                 tv_start_station.setTextSize(15);
 
                 ll.addView(tv_start_station);
                 public_transport_deatail_linear.addView(ll);
 
 
-
                 ll = new LinearLayout(context);
                 ll.setOrientation(LinearLayout.HORIZONTAL);
                 layparam = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 200);
                 ll.setBackground(getResources().getDrawable(R.drawable.information_border));
-                layparam.setMargins(10,10,10,10);
+                layparam.setMargins(10, 10, 10, 10);
                 ll.setLayoutParams(layparam);
 
                 ImageView subway_pic = new ImageView(context);
@@ -431,7 +417,7 @@ public class PublicTransportDetail extends AppCompatActivity {
                 layparam.setMargins(10, 10, 10, 10);
                 layparam.gravity = Gravity.CENTER_VERTICAL;
                 tv_subway1.setLayoutParams(layparam);
-                tv_subway1.setText("line"+subpathArr[i][6]);
+                tv_subway1.setText("line" + subpathArr[i][6]);
                 tv_subway1.setTextColor(Color.parseColor("#ffffff"));
                 tv_subway1.setTextSize(15);
 
@@ -474,7 +460,7 @@ public class PublicTransportDetail extends AppCompatActivity {
                 layparam.setMargins(10, 10, 10, 10);
                 layparam.gravity = Gravity.CENTER_VERTICAL;
                 tv_subway2.setLayoutParams(layparam);
-                tv_subway2.setText(subpathArr[i][1]+"min,  "+subpathArr[i][5]+"stops");
+                tv_subway2.setText(subpathArr[i][1] + "min,  " + subpathArr[i][5] + "stops");
                 tv_subway2.setTextSize(15);
 
                 ll.addView(subway_pic);
@@ -488,7 +474,7 @@ public class PublicTransportDetail extends AppCompatActivity {
                 ll.setOrientation(LinearLayout.HORIZONTAL);
                 layparam = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 200);
                 ll.setBackground(getResources().getDrawable(R.drawable.information_border));
-                layparam.setMargins(10,10,10,10);
+                layparam.setMargins(10, 10, 10, 10);
                 ll.setLayoutParams(layparam);
 
                 TextView tv_end_station = new TextView(context);
@@ -497,22 +483,20 @@ public class PublicTransportDetail extends AppCompatActivity {
                 layparam.gravity = Gravity.CENTER;
                 tv_end_station.setGravity(Gravity.CENTER);
                 tv_end_station.setLayoutParams(layparam);
-                tv_end_station.setText(subpathArr[i][4]+" Station");
+                tv_end_station.setText(subpathArr[i][4] + " Station");
                 tv_end_station.setTextSize(15);
 
                 ll.addView(tv_end_station);
                 public_transport_deatail_linear.addView(ll);
 
 
-            }
-
-            else if(Integer.parseInt(subpathArr[i][0])==2) {//버스일 때
+            } else if (Integer.parseInt(subpathArr[i][0]) == 2) {//버스일 때
 
                 ll = new LinearLayout(context);
                 ll.setOrientation(LinearLayout.HORIZONTAL);
                 layparam = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 200);
                 ll.setBackground(getResources().getDrawable(R.drawable.information_border));
-                layparam.setMargins(10,10,10,10);
+                layparam.setMargins(10, 10, 10, 10);
                 ll.setLayoutParams(layparam);
 
                 TextView tv_start_station = new TextView(context);
@@ -528,12 +512,11 @@ public class PublicTransportDetail extends AppCompatActivity {
                 public_transport_deatail_linear.addView(ll);
 
 
-
                 ll = new LinearLayout(context);
                 ll.setOrientation(LinearLayout.HORIZONTAL);
                 layparam = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 200);
                 ll.setBackground(getResources().getDrawable(R.drawable.information_border));
-                layparam.setMargins(10,10,10,10);
+                layparam.setMargins(10, 10, 10, 10);
                 ll.setLayoutParams(layparam);
 
                 ImageView bus_pic = new ImageView(context);
@@ -580,7 +563,7 @@ public class PublicTransportDetail extends AppCompatActivity {
                 layparam.setMargins(10, 10, 10, 10);
                 layparam.gravity = Gravity.CENTER_VERTICAL;
                 tv_bus2.setLayoutParams(layparam);
-                tv_bus2.setText(subpathArr[i][1]+"min,  "+subpathArr[i][5]+"stops");
+                tv_bus2.setText(subpathArr[i][1] + "min,  " + subpathArr[i][5] + "stops");
                 tv_bus2.setTextSize(15);
 
                 ll.addView(bus_pic);
@@ -594,7 +577,7 @@ public class PublicTransportDetail extends AppCompatActivity {
                 ll.setOrientation(LinearLayout.HORIZONTAL);
                 layparam = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 200);
                 ll.setBackground(getResources().getDrawable(R.drawable.information_border));
-                layparam.setMargins(10,10,10,10);
+                layparam.setMargins(10, 10, 10, 10);
                 ll.setLayoutParams(layparam);
 
                 TextView tv_end_station = new TextView(context);
@@ -613,17 +596,7 @@ public class PublicTransportDetail extends AppCompatActivity {
             }
 
 
-
-
-
-
-
-
-
-
         }
-
-
 
 
         /////////////젤 밑 도착 위치 표시//////////////////////////
@@ -631,7 +604,7 @@ public class PublicTransportDetail extends AppCompatActivity {
         ll.setOrientation(LinearLayout.HORIZONTAL);
         layparam = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 200);
         ll.setBackground(getResources().getDrawable(R.drawable.information_border));
-        layparam.setMargins(10,10,10,10);
+        layparam.setMargins(10, 10, 10, 10);
         ll.setLayoutParams(layparam);
 
 

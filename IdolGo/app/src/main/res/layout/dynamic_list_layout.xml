@@ -4,7 +4,6 @@
     android:layout_height="80sp"
     android:layout_margin="10sp"
     android:orientation="horizontal"
-
     android:background="@drawable/information_border">
 
 
@@ -46,7 +45,6 @@
         android:id="@+id/distance"
         android:layout_width="60sp"
         android:layout_height="match_parent"
-
         android:text="3.5km"
         android:textSize="20sp"
         android:textColor="#ba7c8d"/>

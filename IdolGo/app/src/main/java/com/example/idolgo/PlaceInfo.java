@@ -43,9 +43,10 @@ public class PlaceInfo extends AppCompatActivity {
     String imgurl, strname, strcategory, strurl;
     ImageView photo, title_icon;
     TextView info, address, tel, url, title;
-    Context context=this;
+    Context context = this;
     String addr;
     String endX, endY;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,15 +58,13 @@ public class PlaceInfo extends AppCompatActivity {
         strcategory = it.getStringExtra("it_category");
         strurl = it.getStringExtra("it_url");
 
-        photo = (ImageView)findViewById(R.id.photo);
-        title_icon = (ImageView)findViewById(R.id.title_icon);
-
-
-        info = (TextView)findViewById(R.id.info);
-        address = (TextView)findViewById(R.id.address);
-        tel = (TextView)findViewById(R.id.tel);
-        url = (TextView)findViewById(R.id.url);
-        title = (TextView)findViewById(R.id.title);
+        photo = (ImageView) findViewById(R.id.photo);
+        title_icon = (ImageView) findViewById(R.id.title_icon);
+        info = (TextView) findViewById(R.id.info);
+        address = (TextView) findViewById(R.id.address);
+        tel = (TextView) findViewById(R.id.tel);
+        url = (TextView) findViewById(R.id.url);
+        title = (TextView) findViewById(R.id.title);
 
         title.setText(strname);
 
@@ -87,15 +86,13 @@ public class PlaceInfo extends AppCompatActivity {
 
         protected Void doInBackground(Void... urls) {
             try {
-               Document doc = Jsoup.connect(strurl).get();
+                Document doc = Jsoup.connect(strurl).get();
                 element = doc.select("body").select("#container").select(".holder").select("#content").select(".box-content-slider").select("#main-img").select("img");
                 //;
                 imgurl = element.attr("src");
 
-
                 element = doc.select("body").select("#container").select(".holder").select("#content").select(".box-content.defaultopen").select(".content").select(".fc-black");
                 strinfo = element.toString();
-
 
                 dl = doc.select("body").select("#container").select(".holder").select("#content").select(".box-content.defaultopen.detail").select(".content").select(".cnt-detail.demilight.fc-black2");
                 Log.i("dl", dl.toString());
@@ -103,28 +100,25 @@ public class PlaceInfo extends AppCompatActivity {
                 dd = dl.select("dd");
                 Log.i("dt", dt.toString());
                 Log.i("dd", dd.toString());
-              Log.i("dt size", ""+dt.size());
-              vecdt = new Vector<String>();
-                for(int i=0;i<dt.size();i++) {
+                Log.i("dt size", "" + dt.size());
+                vecdt = new Vector<String>();
 
-                  vecdt.add(dt.get(i).text());
+                for (int i = 0; i < dt.size(); i++) {
 
-                    Log.i("dt : "+i, vecdt.get(i));
+                    vecdt.add(dt.get(i).text());
+
+                    Log.i("dt : " + i, vecdt.get(i));
 
                 }
                 vecdd = new Vector<String>();
-                for(int i=0;i<dd.size();i++){
+                for (int i = 0; i < dd.size(); i++) {
                     vecdd.add(dd.get(i).text());
-                    Log.i("dd : "+i, vecdd. get(i));
+                    Log.i("dd : " + i, vecdd.get(i));
                 }
                 Log.i("element", element.toString());
 
 
-
-
-
-
-                Log.i("imgurl","http://english.visitseoul.net"+imgurl);
+                Log.i("imgurl", "http://english.visitseoul.net" + imgurl);
 
                 /*DownloadWebpageTask2 dwt2 = new DownloadWebpageTask2();
                 dwt2.execute();*/
@@ -135,59 +129,36 @@ public class PlaceInfo extends AppCompatActivity {
             } catch (IOException e) {
 
             }
-           return null;
+            return null;
         }
 
         protected void onPostExecute(Void result) {
             info.setText(Html.fromHtml(strinfo));
 
-            for(int i=0;i<vecdt.size();i++){
-                if(vecdt.get(i).equals("• Address")) {
+            for (int i = 0; i < vecdt.size(); i++) {
+                if (vecdt.get(i).equals("• Address")) {
                     addr = vecdd.get(i);
                     address.setText(addr);
                     try {
                         String query = URLEncoder.encode(addr, "utf-8");
-                        new DownloadWebpageTask2().execute("https://maps.googleapis.com/maps/api/geocode/json?address=" + query +"&key=AIzaSyDIv3KMuSLlyu4yV0M2g105H_7QLhtLywY");
+                        new DownloadWebpageTask2().execute("https://maps.googleapis.com/maps/api/geocode/json?address=" + query + "&key=AIzaSyDIv3KMuSLlyu4yV0M2g105H_7QLhtLywY");
+
+                    } catch (Exception e) {
 
                     }
-                    catch(Exception e){
 
-                    }
-
-                }
-                else if(vecdt.get(i).equals("• Phone"))
+                } else if (vecdt.get(i).equals("• Phone"))
                     tel.setText(vecdd.get(i));
-                else if(vecdt.get(i).equals("• Website"))
+                else if (vecdt.get(i).equals("• Website"))
                     url.setText(dd.get(i).select("a").attr("href"));
             }
-            Glide.with(context).load(Uri.parse("http://english.visitseoul.net"+imgurl+".jpg")).into(photo);
+            Glide.with(context).load(Uri.parse("http://english.visitseoul.net" + imgurl + ".jpg")).into(photo);
         }
 
 
     }
-   /* private class DownloadWebpageTask2 extends AsyncTask<Void, Void, Void> {
 
-        Bitmap photoicon = null;
-        protected Void doInBackground(Void... urls) {
-            try {
-                Log.i("dd","ztz");
-               Glide.with(context).load(Uri.parse("http://english.visitseoul.net"+imgurl)).into(photo);
-            }
-            catch(Exception e) {
-
-            }
-            return null;
-        }
-
-        protected void onPostExecute(Void result) {
-
-            Log.i("ㅋㅅㅋ","ㅎㅎ");
-            photo.setImageBitmap(photoicon);
-        }
-
-    }
-*/
-        public void next(View v){
+    public void next(View v) {
         Intent it = new Intent(this, PublicTransportCase.class);
         it.putExtra("it_endX", endX);
         it.putExtra("it_endY", endY);
@@ -214,7 +185,6 @@ public class PlaceInfo extends AppCompatActivity {
             try {
                 JSONObject json = new JSONObject(result);
                 Log.i("json", json.toString());
-
                 JSONObject jobj = json.getJSONArray("results").getJSONObject(0);
                 Log.i("jobj", jobj.toString());
                 JSONObject geo = jobj.getJSONObject("geometry");
@@ -229,17 +199,14 @@ public class PlaceInfo extends AppCompatActivity {
                 Log.i("endy", endY);
 
 
-
             } catch (Exception e) {
 
             }
-
 
         }
 
 
         private String downloadUrl(String myurl) throws IOException {
-
 
             Log.i("tag", "downloadURL");
             String uri = myurl;
@@ -268,10 +235,8 @@ public class PlaceInfo extends AppCompatActivity {
 
             }
 
-
         }
 
     }
 
 }
-

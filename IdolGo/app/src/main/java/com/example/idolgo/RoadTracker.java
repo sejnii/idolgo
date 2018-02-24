@@ -47,31 +47,27 @@ public class RoadTracker {
 
     int totalDistance;
 
-   public RoadTracker(GoogleMap map){
+    public RoadTracker(GoogleMap map) {
         mMap = map;
     }
 
-    //    public void drawCorrentPath(ArrayList<LatLng> checkedLocations){
-    //   getJsonData().get();
-    //}
-
-    public ArrayList<com.google.android.gms.maps.model.LatLng> getJsonData(final LatLng startPoint, final LatLng endPoint){
-        Thread thread = new Thread(){
+    public ArrayList<com.google.android.gms.maps.model.LatLng> getJsonData(final LatLng startPoint, final LatLng endPoint) {
+        Thread thread = new Thread() {
             @Override
-            public void run(){
+            public void run() {
                 HttpClient httpClient = new DefaultHttpClient();
 
-                Log.i("error","!");
+                Log.i("error", "!");
                 String urlString = "https://api2.sktelecom.com/tmap/routes/pedestrian?version=1&format=json&appKey=ef0c9336-185f-4e6f-9691-fda9827f7276";
-                try{
+                try {
                     URI uri = new URI(urlString);
 
                     HttpClient client = new DefaultHttpClient();
                     //HttpClient httpclient = HttpClients.createDefault();
                     HttpPost httpPost = new HttpPost(urlString);
-                   // httpPost.setURI(uri);
+                    // httpPost.setURI(uri);
 
-                    Log.i("error","2");
+                    Log.i("error", "2");
                     List<BasicNameValuePair> nameValuePairs = new ArrayList<BasicNameValuePair>();
                     nameValuePairs.add(new BasicNameValuePair("startX", Double.toString(startPoint.latitude)));
                     nameValuePairs.add(new BasicNameValuePair("startY", Double.toString(startPoint.longitude)));
@@ -85,24 +81,19 @@ public class RoadTracker {
                     nameValuePairs.add(new BasicNameValuePair("reqCoordType", "WGS84GEO"));
                     nameValuePairs.add(new BasicNameValuePair("resCoordType", "WGS84GEO"));
 
-                    Log.i("error","3");
-                    httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs,"UTF-8"));
+                    Log.i("error", "3");
+                    httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs, "UTF-8"));
 
                     HttpResponse response = httpClient.execute(httpPost);
-              /*      HttpEntity entity = response.getEntity();
-                    InputStream is = entity.getContent();
 
-                    String result = streamToString(is);
-
-                    Log.i("result", result);*/
-                    Log.i("error","4");
+                    Log.i("error", "4");
 
 
                     int code = response.getStatusLine().getStatusCode();
                     String message = response.getStatusLine().getReasonPhrase();
                     Log.i(TAG, "run: " + message);
                     String responseString;
-                    if(response.getEntity() != null)
+                    if (response.getEntity() != null)
                         responseString = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8.toString());
                     else
                         return;
@@ -118,10 +109,9 @@ public class RoadTracker {
                     mapPoints = new ArrayList<>();
 
 
-                    for(int i=0; i<features.length(); i++)
-                    {
+                    for (int i = 0; i < features.length(); i++) {
                         JSONObject test2 = features.getJSONObject(i);
-                        if(i == 0){
+                        if (i == 0) {
                             JSONObject properties = test2.getJSONObject("properties");
                             totalDistance += properties.getInt("totalDistance");
                         }
@@ -130,27 +120,24 @@ public class RoadTracker {
 
 
                         String geoType = geometry.getString("type");
-                        if(geoType.equals("Point"))
-                        {
+                        if (geoType.equals("Point")) {
                             double lonJson = coordinates.getDouble(0);
                             double latJson = coordinates.getDouble(1);
 
                             Log.d(TAG, "-");
-                            Log.d(TAG, lonJson+","+latJson+"\n");
+                            Log.d(TAG, lonJson + "," + latJson + "\n");
                             com.google.android.gms.maps.model.LatLng point = new com.google.android.gms.maps.model.LatLng(latJson, lonJson);
                             mapPoints.add(point);
 
                         }
-                        if(geoType.equals("LineString"))
-                        {
-                            for(int j=0; j<coordinates.length(); j++)
-                            {
+                        if (geoType.equals("LineString")) {
+                            for (int j = 0; j < coordinates.length(); j++) {
                                 JSONArray JLinePoint = coordinates.getJSONArray(j);
                                 double lonJson = JLinePoint.getDouble(0);
                                 double latJson = JLinePoint.getDouble(1);
 
                                 Log.d(TAG, "-");
-                                Log.d(TAG, lonJson+","+latJson+"\n");
+                                Log.d(TAG, lonJson + "," + latJson + "\n");
                                 com.google.android.gms.maps.model.LatLng point = new com.google.android.gms.maps.model.LatLng(latJson, lonJson);
 
                                 mapPoints.add(point);
@@ -158,32 +145,6 @@ public class RoadTracker {
                             }
                         }
                     }
-
-
-                    //DashPathEffect dashPath2 = new DashPathEffect(new float[]{0,0}, 0); //실선
-
-                    /*
-                    JSONObject test = features.getJSONObject(0);
-
-                    JSONObject properties = test.getJSONObject("properties");
-
-                    Log.d(TAG, "3\n");
-                    //JSONObject index = properties.getJSONObject("index");
-                    String nodeType = properties.getString("nodeType");
-
-
-                    Log.d(TAG, "4 " + nodeType+"\n");
-
-                    if(nodeType.equals("POINT")){
-                        String turnType = properties.getString("turnType");
-
-                        Log.d(TAG, "5 " + turnType+"\n");
-                    }
-                    */
-
-                    // 하위 객체에서 데이터를 추출
-                    //strData += features.getString("name") + "\n";
-
 
                 } catch (URISyntaxException e) {
                     Log.e(TAG, e.getLocalizedMessage());
@@ -203,20 +164,21 @@ public class RoadTracker {
         };
         thread.start();
 
-        try{
+        try {
             thread.join();
-        }catch (InterruptedException e){
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
         return mapPoints;
     }
-    private String streamToString(InputStream is){
+
+    private String streamToString(InputStream is) {
         StringBuffer buffer = new StringBuffer();
 
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(is));
             String str = reader.readLine();
-            while (str != null){
+            while (str != null) {
                 buffer.append(str);
                 str = reader.readLine();
             }
@@ -229,4 +191,3 @@ public class RoadTracker {
         return buffer.toString();
     }
 }
-

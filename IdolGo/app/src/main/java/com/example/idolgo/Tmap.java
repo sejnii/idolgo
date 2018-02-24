@@ -62,6 +62,7 @@ import java.security.PrivateKey;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
@@ -87,7 +88,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import static java.net.Proxy.Type.HTTP;
 
 
-
 public class Tmap extends FragmentActivity implements OnMapReadyCallback {
     PolylineOptions rectOptions;
 
@@ -97,8 +97,8 @@ public class Tmap extends FragmentActivity implements OnMapReadyCallback {
     private ArrayList<ArrayList<com.google.android.gms.maps.model.LatLng>> mapPoints;
 
     String it_startX, it_startY, it_endX, it_endY;
-    int polycnt=0;
-    String it_placename,it_path;
+    int polycnt = 0;
+    String it_placename, it_path;
     String strUrl;
     String it_endX2, it_endY2;
 
@@ -106,18 +106,16 @@ public class Tmap extends FragmentActivity implements OnMapReadyCallback {
 
         Log.i("ready", "map");
         mMap = googleMap;
-        Log.i("polycnt", ""+polycnt);
-        for(int i=0;i<mapPoints.size();i++){
+        Log.i("polycnt", "" + polycnt);
+        for (int i = 0; i < mapPoints.size(); i++) {
             rectOptions = new PolylineOptions();
             rectOptions.addAll(mapPoints.get(i)).color(Color.parseColor("#8da2f0")); // Closes the polyline.
             mMap.addPolyline(rectOptions);
-            Log.i("mappoints "+ i , "Gg");
+            Log.i("mappoints " + i, "Gg");
         }
 
         LatLng start = new LatLng(Double.parseDouble(it_startY), Double.parseDouble(it_startX));
         LatLng end = new LatLng(Double.parseDouble(it_endY), Double.parseDouble(it_endX));
-
-
 
         mMap.addMarker(new MarkerOptions()
                 .position(start)
@@ -131,25 +129,21 @@ public class Tmap extends FragmentActivity implements OnMapReadyCallback {
         mMap.moveCamera(CameraUpdateFactory.zoomTo(15));
 
 
-
-
     }
-    public void goAr(View v){
+
+    public void goAr(View v) {
         Intent it = new Intent(this, PedestrianAr.class);
         it.putExtra("it_endX", it_endX2);
         it.putExtra("it_endY", it_endY2);
         startActivity(it);
-
-
-
     }
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 
-
-        View layout = inflater.inflate(R.layout.activity_tmap,container,false);
-        mapView = (MapView)layout.findViewById(R.id.map);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View layout = inflater.inflate(R.layout.activity_tmap, container, false);
+        mapView = (MapView) layout.findViewById(R.id.map);
         return layout;
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -157,7 +151,6 @@ public class Tmap extends FragmentActivity implements OnMapReadyCallback {
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
 
         Intent it = getIntent();
         it_placename = it.getStringExtra("it_placename");
@@ -169,7 +162,6 @@ public class Tmap extends FragmentActivity implements OnMapReadyCallback {
         it_endX = it.getStringExtra("it_endX");
         it_endY = it.getStringExtra("it_endY");
 
-
         try {
             JSONObject jsonPathObject = new JSONObject(it_path);
             JSONArray jArrSubpath = jsonPathObject.getJSONArray("subPath");
@@ -178,7 +170,6 @@ public class Tmap extends FragmentActivity implements OnMapReadyCallback {
             Log.i("subpathcnt", "" + subpathcnt);
 
             String latlng[][] = new String[subpathcnt][6];//startx, starty, endx, endy, traffictype, jsonobj : passstop
-
 
             Log.i("1", "1");
             int cnt = 0;
@@ -198,17 +189,6 @@ public class Tmap extends FragmentActivity implements OnMapReadyCallback {
                     latlng[cnt][1] = jsonObject.getString("startY");
                     latlng[cnt][2] = jsonObject.getString("endX");
                     latlng[cnt][3] = jsonObject.getString("endY");
-                    /*
-                  if(jsonObject.getString("endExitX")!=null){//지하철
-                        latlng[cnt][2] = jsonObject.getString("endExitX");
-                        latlng[cnt][3] = jsonObject.getString("endExitY");
-                 }
-                else{
-                        latlng[cnt][2] = jsonObject.getString("endX");
-                        latlng[cnt][3] = jsonObject.getString("endY");
-                    }
-                    */
-
 
                     latlng[cnt][4] = "" + 1;
                     JSONObject objpassstop = jsonObject.getJSONObject("passStopList");
@@ -221,12 +201,11 @@ public class Tmap extends FragmentActivity implements OnMapReadyCallback {
             it_endX2 = latlng[1][0];
             it_endY2 = latlng[1][1];
 
-
-            Log.i("cnt 개수", ""+cnt);
+            Log.i("cnt 개수", "" + cnt);
 
             mapPoints = new ArrayList<ArrayList<LatLng>>();
             rectOptions = new PolylineOptions();
-            for (int i = 0; i < cnt ; i++) {
+            for (int i = 0; i < cnt; i++) {
 
 
                 Log.i("tmap에서의 i", "" + i);
@@ -251,14 +230,14 @@ public class Tmap extends FragmentActivity implements OnMapReadyCallback {
                 };
                 Log.i("startlat", latlng[i][2]);
                 Log.i("startlong", latlng[i][3]);
-                Log.i("endlat", latlng[i+1][0]);
-                Log.i("endlong", latlng[i+1][1]);
+                Log.i("endlat", latlng[i + 1][0]);
+                Log.i("endlong", latlng[i + 1][1]);
                 tmapPedestrian.execute(latlng[i][2], latlng[i][3], latlng[i + 1][0], latlng[i + 1][1]);
             }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-            for (int i = 1; i < cnt ; i++){
+            for (int i = 1; i < cnt; i++) {
 
                 ArrayList<LatLng> submapPoints = new ArrayList<LatLng>();
 
@@ -286,7 +265,7 @@ public class Tmap extends FragmentActivity implements OnMapReadyCallback {
                 mapPoints.add(submapPoints);
                 //  rectOptions[polycnt].addAll(mapPoints).color(Color.parseColor("#8da2f0")); // Closes the polyline.
                 polycnt++;
-                Log.i("polycnt",""+polycnt);
+                Log.i("polycnt", "" + polycnt);
 
 
             }
@@ -314,36 +293,9 @@ public class Tmap extends FragmentActivity implements OnMapReadyCallback {
 
     }
 
-/*
-
-        //     new DownloadWebpageTask().execute(strUrl);
-/*
-
-        LatLng startPoint = new LatLng(127.066847, 37.510350);
-        LatLng endPoint = new LatLng(127.0254323, 37.497942);
-        //  rt.getJsonData(startPoint,endPoint);
-
-        // 20.2.2
-*/
-
-
-
-
-
-
-
-
-
-
-
-
     public void detailed_route(View v) {
 
-
-
-
         Intent it = new Intent(context, PublicTransportDetail.class);
-
         it.putExtra("it_placename", it_placename);
         it.putExtra("it_path", it_path);
         startActivity(it);
