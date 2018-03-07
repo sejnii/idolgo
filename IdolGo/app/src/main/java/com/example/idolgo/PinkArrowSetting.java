@@ -84,8 +84,10 @@ public class PinkArrowSetting implements SensorEventListener, LocationListener{
          //    Log.i("pathpoint 몇개?", ""+cntpoint);
 
                 if (pointDistance <= 10 && cntpoint < pathPoints.size() - 1) {
+
+
                     Log.i("cntpoint", "" + cntpoint);
-                    cntpoint++; //다음 pathpoint로 이동
+                   cntpoint++; //다음 pathpoint로 이동
 
                 }
                 else {
@@ -280,9 +282,57 @@ public class PinkArrowSetting implements SensorEventListener, LocationListener{
                 destDist = distance(latitude, longitude, endlat, endlong);
                Log.i("destdist", ""+destDist);
             //    Log.i("pathpoint 몇개?", ""+pathPoints.size());
+
+
+                //////////////////////////////////////////두점뽑기////////////////////////////////////////////////////////////////////////////
+
+                int point1, point2;
+                double mindist1, mindist2;
+                if(distance(latitude, longitude, pathPoints.get(0).getLatitude(), pathPoints.get(0).getLongitude())< distance(latitude, longitude, pathPoints.get(1).getLatitude(), pathPoints.get(1).getLongitude()))
+                {
+                    mindist1 = distance(latitude, longitude, pathPoints.get(0).getLatitude(), pathPoints.get(0).getLongitude());
+                    mindist2 = distance(latitude, longitude, pathPoints.get(1).getLatitude(), pathPoints.get(1).getLongitude());
+                    point1 = 0;
+                    point2 = 1;
+                }
+                else {
+                    mindist2 = distance(latitude, longitude, pathPoints.get(0).getLatitude(), pathPoints.get(0).getLongitude());
+                    mindist1 = distance(latitude, longitude, pathPoints.get(1).getLatitude(), pathPoints.get(1).getLongitude());
+                    point2 = 0;
+                    point1 = 1;
+                }
+
+                for(int p = 0;p<pathPoints.size()-1;p++){
+                    double tempdistance = distance(latitude, longitude, pathPoints.get(p).getLatitude(), pathPoints.get(p).getLongitude());
+
+                    if(mindist1 > tempdistance){
+                        mindist1 = tempdistance;
+                        point1 = p;
+
+                    }
+                    else{
+                        if(mindist2 > tempdistance){
+                            mindist2 = tempdistance;
+                            point2 = p;
+                        }
+                    }
+                }
+
+                cntpoint = Math.max(point1, point2);
+
+                Toast.makeText(context, "cntpoint :  " + cntpoint, Toast.LENGTH_SHORT);
+
+
+                /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                Log.i("cntpoint", ""+cntpoint);
+
                 if (pointDistance <= 3 && cntpoint < pathPoints.size() - 1) {
+
                     Log.i("cntpoint", ""+cntpoint);
-                    cntpoint++; //다음 pathpoint로 이동
+
+
+                   cntpoint++; //다음 pathpoint로 이동
                     //북쪽각도 ~ point와 현재위치 직선 각도
                     Double bearing = bearingP1toP2(latitude, longitude, pathPoints.get(cntpoint).getLatitude(), pathPoints.get(cntpoint).getLongitude());
                     Double pointbearing = mybearing - bearing;//내 각도 ~ point각도

@@ -105,7 +105,16 @@ public class PedestrianAr extends AppCompatActivity implements SurfaceHolder.Cal
                for(int i=0;i<pathPoints.size();i++){
                    mapPoints.add(new LatLng(pathPoints.get(i).getLatitude(), pathPoints.get(i).getLongitude()));
                }
+
                 pas.setPathPoints(pathPoints);
+
+
+                for(int i=0;i<pathPoints.size();i++){
+                    MarkerOptions makerOptions = new MarkerOptions();
+                    makerOptions.position(mapPoints.get(i)).title(""+i);
+                    mMap.addMarker(makerOptions);
+
+                }
 
 
                 PolylineOptions rectOptions = new PolylineOptions();
