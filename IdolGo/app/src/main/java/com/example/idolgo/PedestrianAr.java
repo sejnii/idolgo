@@ -229,10 +229,23 @@ public class PedestrianAr extends AppCompatActivity implements SurfaceHolder.Cal
      public void onStatusChanged(String s, int i, Bundle bundle){
 
      }
+     public void onPause(){
+         super.onPause();
+         pas.sensorManager.unregisterListener(pas);
+         pas.manager.removeUpdates(pas);
+         pas = null;
+         finish();
+     }
+     public void onStop(){
+         super.onStop();
+         pas = null;
+         finish();
+     }
 
      public void onDestroy(){
          super.onDestroy();
          pas = null;
+         finish();
 
 
      }
@@ -304,7 +317,9 @@ public class PedestrianAr extends AppCompatActivity implements SurfaceHolder.Cal
           camera.stopPreview();
           camera.release();
           camera = null;
-          previewing = false; }
+          previewing = false;
+          pas = null;
+     }
 
 
 

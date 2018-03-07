@@ -80,8 +80,8 @@ public class PinkArrowSetting implements SensorEventListener, LocationListener{
                Log.i("pointdistnace", ""+pointDistance);
                 destDist = distance(latitude, longitude, endlat, endlong);
                 tv2.setText("About "+destDist+"m");
-               Log.i("destdist", ""+destDist);
-             Log.i("pathpoint 몇개?", ""+cntpoint);
+           //    Log.i("destdist", ""+destDist);
+         //    Log.i("pathpoint 몇개?", ""+cntpoint);
 
                 if (pointDistance <= 10 && cntpoint < pathPoints.size() - 1) {
                     Log.i("cntpoint", "" + cntpoint);
@@ -106,7 +106,7 @@ public class PinkArrowSetting implements SensorEventListener, LocationListener{
                         while (pointbearing < -180)
                             pointbearing += 360;
 
-                    Log.i("point bearing", "" + pointbearing);
+                  //  Log.i("point bearing", "" + pointbearing);
                     if (pointbearing > -45 && pointbearing <= 45)
                         pinkarrow.setRotation(0);//그대로
                     else if (pointbearing > 45 && pointbearing <= 135)
@@ -276,10 +276,10 @@ public class PinkArrowSetting implements SensorEventListener, LocationListener{
             if(pathPoints != null) {
                 //user위치로 부터 ~ 각 path point까지 거리
                 Double pointDistance = distance(latitude, longitude, pathPoints.get(cntpoint).getLatitude(), pathPoints.get(cntpoint).getLongitude());
-                Log.i("pointdistnace", ""+pointDistance);
+            //    Log.i("pointdistnace", ""+pointDistance);
                 destDist = distance(latitude, longitude, endlat, endlong);
-                Log.i("destdist", ""+destDist);
-                Log.i("pathpoint 몇개?", ""+pathPoints.size());
+               Log.i("destdist", ""+destDist);
+            //    Log.i("pathpoint 몇개?", ""+pathPoints.size());
                 if (pointDistance <= 3 && cntpoint < pathPoints.size() - 1) {
                     Log.i("cntpoint", ""+cntpoint);
                     cntpoint++; //다음 pathpoint로 이동
@@ -306,12 +306,11 @@ public class PinkArrowSetting implements SensorEventListener, LocationListener{
 
                 }
 
-            if (destDist <= 5) {//최종목적지까지 거리
+          if (destDist <= 10) {//최종목적지까지 거리
                 if(destdist ==false) {
                     Toast.makeText(context, "목적지도착", Toast.LENGTH_LONG).show();
 
                     if (isfinal == true) {
-
                         new MaterialDialog.Builder(context).title("Arrived At Your Final Destination").
                                 content("Do you want to get nearby facilities information?").
                                 positiveText("Yes").negativeText("No").
@@ -336,6 +335,7 @@ public class PinkArrowSetting implements SensorEventListener, LocationListener{
                                 }).backgroundColor(Color.parseColor("#bbbcbf")).show();
 
                     } else {
+                        Log.i("dd", "final 아님");
                         Toast.makeText(context, "목적지도착", Toast.LENGTH_LONG).show();
                         if (isfinal == false) {
                             new MaterialDialog.Builder(context).title("Arrived At Your Destination").content("End the AR guidance service")

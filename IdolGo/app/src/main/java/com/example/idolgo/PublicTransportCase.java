@@ -183,6 +183,7 @@ public class PublicTransportCase extends AppCompatActivity  {
                 caseSubPathArr = new String[pathcnt][][];
                 caseInfoArr = new int[pathcnt][5];
                 for (int i = 0; i < pathcnt; i++) {
+                    walktotaltime = 0;
                     JSONObject jsonPathObject = jArrPath.getJSONObject(i);
                     pathArr[i] = jsonPathObject.toString();
                     Log.i("path"+i, jsonPathObject.toString());

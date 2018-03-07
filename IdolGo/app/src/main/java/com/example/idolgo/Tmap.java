@@ -166,7 +166,7 @@ public class Tmap extends FragmentActivity implements OnMapReadyCallback, Locati
         return (rad * 180.0 / Math.PI);
     }
 
-    public void goAr(View v){ 
+    public void goAr(View v){
 
 
         Boolean isfinal = false;
@@ -175,15 +175,27 @@ public class Tmap extends FragmentActivity implements OnMapReadyCallback, Locati
             Log.i("lat"+i, latlng[i][1]);
             Log.i("lon"+i, latlng[i][0]);
         }
-        double min = distance(Double.parseDouble(latlng[0][3]),Double.parseDouble(latlng[0][2]),location.getLatitude(), location.getLongitude());
+
+        for(int i=0;i<cnt;i++){
+            Log.i("Startlat"+i, latlng[i][3]);
+            Log.i("Startlong"+i, latlng[i][2]);
+        }
+        double currentlat, currentlong;
+        startLocationService();
+
+        currentlat = location.getLatitude();
+       currentlong = location.getLongitude();
+        double min = distance(Double.parseDouble(latlng[0][3]),Double.parseDouble(latlng[0][2]),currentlat, currentlong);
+        Log.i("distance", ""+min);
 
         double minlat, minlon;
                 minlat= Double.parseDouble(latlng[1][1]);
                 minlon = Double.parseDouble(latlng[1][0]);
         for(int i=1;i<cnt;i++){
-            if(min > distance(Double.parseDouble(latlng[i][3]),Double.parseDouble(latlng[i][2]),location.getLatitude(), location.getLongitude())) {
-               Log.i("distance", ""+distance(Double.parseDouble(latlng[i][3]),Double.parseDouble(latlng[i][2]),location.getLatitude(), location.getLongitude()));
-                min = distance(Double.parseDouble(latlng[i][3]), Double.parseDouble(latlng[i][2]), location.getLatitude(), location.getLongitude());
+            Log.i("distance", ""+distance(Double.parseDouble(latlng[i][3]),Double.parseDouble(latlng[i][2]), currentlat,  currentlong));
+            if(min > distance(Double.parseDouble(latlng[i][3]),Double.parseDouble(latlng[i][2]),currentlat,  currentlong)) {
+               Log.i("distance", ""+distance(Double.parseDouble(latlng[i][3]),Double.parseDouble(latlng[i][2]), currentlat,  currentlong));
+                min = distance(Double.parseDouble(latlng[i][3]), Double.parseDouble(latlng[i][2]),  currentlat,  currentlong);
                 minlat = Double.parseDouble(latlng[i+1][1]);
                 minlon = Double.parseDouble(latlng[i+1][0]);
                 if(i==cnt-1)
@@ -256,10 +268,25 @@ public class Tmap extends FragmentActivity implements OnMapReadyCallback, Locati
                 Log.i("traffictype", "" + trafficType);
                 if (trafficType == 1 || trafficType == 2) {
 
-                    latlng[cnt][0] = jsonObject.getString("startX");
-                    latlng[cnt][1] = jsonObject.getString("startY");
-                    latlng[cnt][2] = jsonObject.getString("endX");
-                    latlng[cnt][3] = jsonObject.getString("endY");
+                    if(jsonObject.has("startExitX")) {
+                        latlng[cnt][0] = jsonObject.getString("startExitX");
+                        latlng[cnt][1] = jsonObject.getString("startExitY");
+                    }
+                    else {
+                        latlng[cnt][0] = jsonObject.getString("startX");
+                        latlng[cnt][1] = jsonObject.getString("startY");
+                    }
+
+                   if(jsonObject.has("endExitX")){
+                       latlng[cnt][2] = jsonObject.getString("endExitX");
+                       latlng[cnt][3] = jsonObject.getString("endExitY");
+                       Log.i("endexitx", latlng[cnt][2]);
+                       Log.i("endexity", latlng[cnt][3]);
+                   }
+                   else {
+                       latlng[cnt][2] = jsonObject.getString("endX");
+                       latlng[cnt][3] = jsonObject.getString("endY");
+                   }
                     /*
                   if(jsonObject.getString("endExitX")!=null){//지하철
                         latlng[cnt][2] = jsonObject.getString("endExitX");
