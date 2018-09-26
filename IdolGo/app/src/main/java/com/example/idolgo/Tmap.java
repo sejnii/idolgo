@@ -6,6 +6,9 @@ import android.content.Context;
 import android.content.Entity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.AssetManager;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -13,6 +16,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -20,6 +24,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -34,6 +39,7 @@ import android.widget.Toolbar;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Polyline;
@@ -63,6 +69,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.PrivateKey;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -93,6 +100,8 @@ import static java.net.Proxy.Type.HTTP;
 public class Tmap extends FragmentActivity implements OnMapReadyCallback, LocationListener {
     PolylineOptions rectOptions;
 
+    Marker marker;
+    MarkerOptions mo;
     int cnt = 0;
     Location location;
     LocationManager manager;
@@ -128,7 +137,6 @@ public class Tmap extends FragmentActivity implements OnMapReadyCallback, Locati
 
         mMap.addMarker(new MarkerOptions()
                         .position(start)
-                        .title("Current Location")
                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.dep2)));
         mMap.addMarker(new MarkerOptions()
                 .position(end)
@@ -224,14 +232,31 @@ public class Tmap extends FragmentActivity implements OnMapReadyCallback, Locati
         return layout;
     }
     @Override
+    public void onResume(){
+
+
+        super.onResume();
+
+        LatLng cur = new LatLng(location.getLatitude(), location.getLongitude());
+        CameraUpdate cu = CameraUpdateFactory.newLatLng(cur);
+        if(mMap != null)
+        mMap.moveCamera(cu);
+    }
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tmap);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        Locale en = Locale.US;
+        Configuration config = new Configuration();
+        config.locale = en;
+        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+
 
         startLocationService();
+
+
 
         Intent it = getIntent();
         it_placename = it.getStringExtra("it_placename");
@@ -487,9 +512,16 @@ Log.i("cnt 개수", ""+cnt);
         manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, minTime, minDistance, this);
         manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, minTime, minDistance, this);
 
+
+
+
+
+
         return location;
 
     }
+
+
     public void showSettingsAlert() {
         {
             // GPS OFF 일때 Dialog 표시
@@ -508,6 +540,19 @@ Log.i("cnt 개수", ""+cnt);
 
 
         public void onLocationChanged(Location location) {
+
+      if (marker!= null)
+          marker.remove();
+
+
+        LatLng cur = new LatLng(location.getLatitude(), location.getLongitude());
+
+            marker = mMap.addMarker(new MarkerOptions()
+                    .position( cur)
+                    .title("Current Location")
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+
+
 
 
     }

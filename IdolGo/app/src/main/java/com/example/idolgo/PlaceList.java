@@ -89,9 +89,9 @@ public class PlaceList extends AppCompatActivity {
 
         // String strUrl = "http://contents.visitseoul.net/file_save/rss/0004003002004en.xml";
 
-        new DownloadWebpageTask().execute("http://192.168.20.30/PHP_connection.php");//학교
-        // new DownloadWebpageTask().execute("http://192.168.20.1/PHP_connection.php");//
-        // new DownloadWebpageTask().execute("http://192.168.20.1/PHP_connection.php");//
+        new DownloadWebpageTask().execute("http://192.168.20.99/PHP_connection.php");//학교
+         //new DownloadWebpageTask().execute("http://172.30.58.126/PHP_connection.php");//이대스벅3층
+        //new DownloadWebpageTask().execute("http://192.168.0.9/PHP_connection.php");//우리은행
 
 
     }
@@ -162,9 +162,9 @@ int cnt=1;
                 TextView num = new TextView(context);
                 num.setId(nnum + i);
                 layparam = new LinearLayout.LayoutParams(30, LinearLayout.LayoutParams.MATCH_PARENT);
-                layparam.setMargins(5, 5, 5, 5);
+                layparam.setMargins(20, 5, 5, 5);
                 num.setLayoutParams(layparam);
-                num.setGravity(Gravity.CENTER);
+                num.setGravity(Gravity.LEFT);
                 num.setTextColor(Color.parseColor("#c9b3b5"));
                 num.setTextSize(25);
                 String numstring = "" + (cnt);
@@ -198,7 +198,7 @@ int cnt=1;
                 place.setText((String) placeNameVector.elementAt(i));
 
 
-                TextView distance = new TextView(context);
+              /*  TextView distance = new TextView(context);
                 distance.setId(ndistance + i);
                 layparam = new LinearLayout.LayoutParams(60, LinearLayout.LayoutParams.MATCH_PARENT);
                 layparam.setMargins(5, 5, 5, 5);
@@ -208,11 +208,11 @@ int cnt=1;
                 distance.setTextColor(Color.parseColor("#ba7c8d"));
                 distance.setTextSize(20);
                 distance.setText("3.5km");
-
+*/
                 ll.addView(num);
                 ll.addView(pic);
                 ll.addView(place);
-                ll.addView(distance);
+             //   ll.addView(distance);
 
                 ll.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -286,7 +286,7 @@ int cnt=1;
             try {
                 Log.i("tag", "doinbackground");
                 return (String) downloadUrl((String) urls[0]);
-            } catch (IOException e) {
+            } catch (   IOException e) {
                 return "다운로드 실패";
             }
         }

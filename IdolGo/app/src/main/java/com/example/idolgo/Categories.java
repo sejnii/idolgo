@@ -1,6 +1,8 @@
 package com.example.idolgo;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -12,6 +14,26 @@ public class Categories extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_categories);
+        int permissionResult = checkSelfPermission(Manifest.permission.CALL_PHONE);
+
+        if (permissionResult == PackageManager.PERMISSION_DENIED)
+            requestPermissions(new String[]{Manifest.permission.CALL_PHONE}, 1000);
+
+        permissionResult = checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
+        if (permissionResult == PackageManager.PERMISSION_DENIED)
+            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1000);
+
+        permissionResult = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (permissionResult == PackageManager.PERMISSION_DENIED)
+            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1000);
+
+
+        permissionResult = checkSelfPermission(Manifest.permission.WRITE_SETTINGS);
+        if (permissionResult == PackageManager.PERMISSION_DENIED)
+            requestPermissions(new String[]{Manifest.permission.WRITE_SETTINGS}, 1000);
+
+
+
 
     }
     public void next(View v){

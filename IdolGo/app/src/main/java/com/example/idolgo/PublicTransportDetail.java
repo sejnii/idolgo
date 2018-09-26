@@ -41,7 +41,7 @@ public class PublicTransportDetail extends AppCompatActivity {
             JSONArray jArrSubpath = jsonPathObject.getJSONArray("subPath");
             Log.i("subpatharr", jArrSubpath.toString());
             subpathcnt = jArrSubpath.length();
-            subpathArr = new String[subpathcnt][8];
+            subpathArr = new String[subpathcnt][10];
             for (int j = 0; j < subpathcnt; j++) {
                 jsonObject = jArrSubpath.getJSONObject(j);
                 Log.i("subpath"+j , jsonObject.toString());
@@ -65,8 +65,15 @@ public class PublicTransportDetail extends AppCompatActivity {
                     String startName = jsonObject.getString("startName");
                     subpathArr[j][3] = startName;
                     Log.i("startName", startName);
+                    if(jsonObject.has("startExitNo"))
+                        subpathArr[j][8] = jsonObject.getString("startExitNo");
                     String endName = jsonObject.getString("endName");
                     subpathArr[j][4] = endName;
+
+                    if(jsonObject.has("endExitNo"))
+                        subpathArr[j][9] = jsonObject.getString("endExitNo");
+
+
                     Log.i("endName", endName);
                     JSONArray jArrLane = jsonObject.getJSONArray("lane");
                     JSONObject lane = jArrLane.getJSONObject(0);
@@ -232,6 +239,9 @@ public class PublicTransportDetail extends AppCompatActivity {
                         break;
                     case 100:
                         lane.setBackgroundColor(Color.parseColor("#ffcc01"));
+                        break;
+                    case 104:
+                        lane.setBackgroundColor(Color.parseColor("#3cb9ab"));
                         break;
 
                 }
@@ -404,7 +414,12 @@ public class PublicTransportDetail extends AppCompatActivity {
                 layparam.gravity = Gravity.CENTER;
                 tv_start_station.setGravity(Gravity.CENTER);
                 tv_start_station.setLayoutParams(layparam);
-                tv_start_station.setText(subpathArr[i][3]+" Station");
+                String s2 = "";
+                if(subpathArr[i][8]!="")
+                    s2 = subpathArr[i][3]+" Station " + "Exit "+ subpathArr[i][9];
+                else
+                     s2 = subpathArr[i][3]+" Station";
+                tv_start_station.setText(s2);
                 tv_start_station.setTextSize(15);
 
                 ll.addView(tv_start_station);
@@ -431,6 +446,7 @@ public class PublicTransportDetail extends AppCompatActivity {
                 layparam.setMargins(10, 10, 10, 10);
                 layparam.gravity = Gravity.CENTER_VERTICAL;
                 tv_subway1.setLayoutParams(layparam);
+
                 tv_subway1.setText("line"+subpathArr[i][6]);
                 tv_subway1.setTextColor(Color.parseColor("#ffffff"));
                 tv_subway1.setTextSize(15);
@@ -466,6 +482,9 @@ public class PublicTransportDetail extends AppCompatActivity {
                     case 100:
                         tv_subway1.setBackgroundColor(Color.parseColor("#ffcc01"));
                         break;
+                    case 104:
+                        tv_subway1.setBackgroundColor(Color.parseColor("#3cb9ab"));
+                        break;
 
                 }
 
@@ -497,7 +516,12 @@ public class PublicTransportDetail extends AppCompatActivity {
                 layparam.gravity = Gravity.CENTER;
                 tv_end_station.setGravity(Gravity.CENTER);
                 tv_end_station.setLayoutParams(layparam);
-                tv_end_station.setText(subpathArr[i][4]+" Station");
+                String s = "";
+                if(subpathArr[i][9]!="")
+                    s = subpathArr[i][4]+" Station " + "Exit " + subpathArr[i][9];
+                else
+                    s = subpathArr[i][4]+" Station";
+                tv_end_station.setText(s);
                 tv_end_station.setTextSize(15);
 
                 ll.addView(tv_end_station);

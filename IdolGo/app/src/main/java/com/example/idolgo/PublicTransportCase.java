@@ -365,6 +365,8 @@ public class PublicTransportCase extends AppCompatActivity  {
                                 case 100:
                                     lane.setBackgroundColor(Color.parseColor("#ffcc01"));
                                     break;
+                                case 104:
+                                    lane.setBackgroundColor(Color.parseColor("#3cb9ab"));
 
                             }
 

@@ -36,7 +36,8 @@ import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListe
 public class NearByInfo extends AppCompatActivity implements OnConnectionFailedListener{
 
     Context context = this;
-   Double it_endlat, it_endlon;
+   Double it_endlat = 37.57961, it_endlon= 126.9748469;
+
    private GoogleApiClient mGoogleApiClient;
 
     LinearLayout listLayout;
@@ -64,8 +65,8 @@ public class NearByInfo extends AppCompatActivity implements OnConnectionFailedL
       nearbylinear = (LinearLayout) findViewById(R.id.nearbylinear);
 
        Intent it = getIntent();
-       it_endlat = it.getDoubleExtra("it_endlat", 37.5537722);
-       it_endlon = it.getDoubleExtra("it_endlon", 126.9806958);
+     //  it_endlat = it.getDoubleExtra("it_endlat", 37.5537722);
+       //it_endlon = it.getDoubleExtra("it_endlon", 126.9806958);
 
 
        mGoogleApiClient = new GoogleApiClient

@@ -60,8 +60,8 @@ public class PinkArrowSetting implements SensorEventListener, LocationListener{
         float height = activity.getApplicationContext().getResources().getDisplayMetrics().heightPixels;
         float width = activity.getApplicationContext().getResources().getDisplayMetrics().widthPixels;
         float imgHeight = pinkarrow.getLayoutParams().height;
-        pinkarrow.setX(500);
-        pinkarrow.setY((height - imgHeight)/2 + (-(-90 + 90) / (float) 90) * (height));
+        pinkarrow.setX(450);
+        pinkarrow.setY((height - imgHeight)/2 + (-(-90 + 90) / (float) 90) * (height)+30);
           startLocationService();
           sensorManager = (SensorManager)activity.getSystemService(Context.SENSOR_SERVICE);
           sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
@@ -78,7 +78,7 @@ public class PinkArrowSetting implements SensorEventListener, LocationListener{
             if (pathPoints != null) {
                 Double pointDistance = distance(latitude, longitude, pathPoints.get(cntpoint).getLatitude(), pathPoints.get(cntpoint).getLongitude());
                Log.i("pointdistnace", ""+pointDistance);
-                destDist = distance(latitude, longitude, endlat, endlong);
+                destDist = distance(latitude, longitude, pathPoints.get(pathPoints.size()-1).getLatitude(), pathPoints.get(pathPoints.size()-1).getLongitude());
                 tv2.setText("About "+destDist+"m");
            //    Log.i("destdist", ""+destDist);
          //    Log.i("pathpoint 몇개?", ""+cntpoint);
@@ -95,6 +95,58 @@ public class PinkArrowSetting implements SensorEventListener, LocationListener{
                     tv1.setText(tv1str);
                 }
 
+
+                //if (destDist <= 5) {//최종목적지까지 거리
+                    if(destdist ==false) {
+                        Toast.makeText(context, "목적지도착", Toast.LENGTH_LONG).show();
+
+                      //  if (isfinal == true) {
+                            new MaterialDialog.Builder(context).title("Arrived At Your Final Destination").
+                                    content("Do you want to get nearby facilities information?").
+                                    positiveText("Yes").negativeText("No").
+                                    onPositive(new MaterialDialog.SingleButtonCallback() {
+                                        @Override
+                                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                            Intent it = new Intent(context, NearByInfo.class);
+                                            it.putExtra("it_endlat", endlat);
+                                            it.putExtra("it_endlong", endlong);
+                                            // activity.finish();
+                                            context.startActivity(it);
+                                        }
+                                    }).
+                                    onNegative(new MaterialDialog.SingleButtonCallback() {
+                                        @Override
+                                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                            Intent it = new Intent(context, Categories.class);
+                                            it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                            //  activity.finish();
+                                            context.startActivity(it);
+                                        }
+                                    }).backgroundColor(Color.parseColor("#bbbcbf")).show();
+
+                       /* } else {
+                            Log.i("dd", "final 아님");
+                            Toast.makeText(context, "목적지도착", Toast.LENGTH_LONG).show();
+                            if (isfinal == false) {
+                                new MaterialDialog.Builder(context).title("Arrived At Your Destination").content("End the AR guidance service")
+                                        .positiveText("Confirm").onPositive(new MaterialDialog.SingleButtonCallback() {
+                                    @Override
+                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                        activity.finish();
+
+                                    }
+                                }).backgroundColor(Color.parseColor("#bbbcbf")).cancelable(false).canceledOnTouchOutside(false).show();
+                            }
+
+
+                        }*/
+
+                        destdist = true;
+
+                    }
+
+
+                }
 
                     mybearing = event.values[0];
                     Double bearing = bearingP1toP2(latitude, longitude, pathPoints.get(cntpoint).getLatitude(), pathPoints.get(cntpoint).getLongitude());
@@ -123,7 +175,7 @@ public class PinkArrowSetting implements SensorEventListener, LocationListener{
 
             }
         }
-    }
+    //}
 
 
     private Location startLocationService() {
@@ -218,12 +270,12 @@ public class PinkArrowSetting implements SensorEventListener, LocationListener{
             P2_longitude) {
         // 현재 위치 : 위도나 경도는 지구 중심을 기반으로 하는 각도이기 때문에
         //라디안 각도로 변환한다.
-        double Cur_Lat_radian = P1_latitude * (3.141592 / 180);
-        double Cur_Lon_radian = P1_longitude * (3.141592 / 180);
+        double Cur_Lat_radian = P1_latitude * (Math.PI / 180.0);
+        double Cur_Lon_radian = P1_longitude * (Math.PI / 180.0);
         // 목표 위치 : 위도나 경도는 지구 중심을 기반으로 하는 각도이기 때문에
         // 라디안 각도로 변환한다.
-        double Dest_Lat_radian = P2_latitude * (3.141592 / 180);
-        double Dest_Lon_radian = P2_longitude * (3.141592 / 180);
+        double Dest_Lat_radian = P2_latitude * (Math.PI / 180.0);
+        double Dest_Lon_radian = P2_longitude * (Math.PI / 180.0);
         // radian distance
         double radian_distance = 0;
         radian_distance = Math.acos(Math.sin(Cur_Lat_radian) * Math.sin(Dest_Lat_radian) + Math.cos
@@ -235,9 +287,10 @@ public class PinkArrowSetting implements SensorEventListener, LocationListener{
         // acos의 인수로 주어지는 x는 360분법의 각도가 아닌 radian(호도)값이다.
         double true_bearing = 0;
         if (Math.sin(Dest_Lon_radian - Cur_Lon_radian) < 0) {
-            true_bearing = radian_bearing * (180 / 3.141592);   true_bearing = 360 - true_bearing;
+            true_bearing = radian_bearing * (Math.PI / 180.0);
+            true_bearing = 360 - true_bearing;
         } else {
-            true_bearing = radian_bearing * (180 / 3.141592);
+            true_bearing = radian_bearing * (Math.PI / 180.0);
         }
         return true_bearing;
     }
@@ -279,9 +332,11 @@ public class PinkArrowSetting implements SensorEventListener, LocationListener{
                 //user위치로 부터 ~ 각 path point까지 거리
                 Double pointDistance = distance(latitude, longitude, pathPoints.get(cntpoint).getLatitude(), pathPoints.get(cntpoint).getLongitude());
             //    Log.i("pointdistnace", ""+pointDistance);
-                destDist = distance(latitude, longitude, endlat, endlong);
-               Log.i("destdist", ""+destDist);
+                destDist = distance(latitude, longitude, pathPoints.get(pathPoints.size()-1).getLatitude(), pathPoints.get(pathPoints.size()-1).getLongitude());
+                Log.i("destdist", ""+destDist);
             //    Log.i("pathpoint 몇개?", ""+pathPoints.size());
+
+
 
 
                 //////////////////////////////////////////두점뽑기////////////////////////////////////////////////////////////////////////////
@@ -320,10 +375,13 @@ public class PinkArrowSetting implements SensorEventListener, LocationListener{
 
                 cntpoint = Math.max(point1, point2);
 
-                Toast.makeText(context, "cntpoint :  " + cntpoint, Toast.LENGTH_SHORT);
+             //   cntpoint++;
+                Toast.makeText(context, "cntpoint :  " + cntpoint, Toast.LENGTH_LONG).show();
 
 
                 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
                 Log.i("cntpoint", ""+cntpoint);
 
@@ -356,7 +414,7 @@ public class PinkArrowSetting implements SensorEventListener, LocationListener{
 
                 }
 
-          if (destDist <= 10) {//최종목적지까지 거리
+          if (destDist <= 5) {//최종목적지까지 거리
                 if(destdist ==false) {
                     Toast.makeText(context, "목적지도착", Toast.LENGTH_LONG).show();
 
