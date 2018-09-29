@@ -341,39 +341,29 @@ public class PinkArrowSetting implements SensorEventListener, LocationListener{
 
                 //////////////////////////////////////////두점뽑기////////////////////////////////////////////////////////////////////////////
 
-                int point1, point2;
-                double mindist1, mindist2;
-                if(distance(latitude, longitude, pathPoints.get(0).getLatitude(), pathPoints.get(0).getLongitude())< distance(latitude, longitude, pathPoints.get(1).getLatitude(), pathPoints.get(1).getLongitude()))
-                {
-                    mindist1 = distance(latitude, longitude, pathPoints.get(0).getLatitude(), pathPoints.get(0).getLongitude());
-                    mindist2 = distance(latitude, longitude, pathPoints.get(1).getLatitude(), pathPoints.get(1).getLongitude());
-                    point1 = 0;
-                    point2 = 1;
-                }
-                else {
-                    mindist2 = distance(latitude, longitude, pathPoints.get(0).getLatitude(), pathPoints.get(0).getLongitude());
-                    mindist1 = distance(latitude, longitude, pathPoints.get(1).getLatitude(), pathPoints.get(1).getLongitude());
-                    point2 = 0;
-                    point1 = 1;
-                }
-
-                for(int p = 0;p<pathPoints.size()-1;p++){
-                    double tempdistance = distance(latitude, longitude, pathPoints.get(p).getLatitude(), pathPoints.get(p).getLongitude());
+                int point1=0;
+                double mindist1;
+                double tmp;
+                tmp = distance(latitude, longitude, pathPoints.get(1).getLatitude(), pathPoints.get(1).getLongitude())
+               mindist1 = distance(latitude, longitude, pathPoints.get(0).getLatitude(), pathPoints.get(0).getLongitude())
+                   + tmp;
+                
+                for(int p = 1;p<pathPoints.size()-1;p++){
+                  
+                    double tempdistance = tmp;
+                        
+                    tmp = distance(latitude, longitude, pathPoints.get(p+1).getLatitude(), pathPoints.get(p+1).getLongitude());
+                    tempdistance += tmp;
 
                     if(mindist1 > tempdistance){
                         mindist1 = tempdistance;
                         point1 = p;
 
                     }
-                    else{
-                        if(mindist2 > tempdistance){
-                            mindist2 = tempdistance;
-                            point2 = p;
-                        }
-                    }
+                    
                 }
 
-                cntpoint = Math.max(point1, point2);
+                cntpoint = point1+1;
 
              //   cntpoint++;
                 Toast.makeText(context, "cntpoint :  " + cntpoint, Toast.LENGTH_LONG).show();
